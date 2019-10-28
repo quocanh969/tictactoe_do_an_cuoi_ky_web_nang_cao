@@ -4,17 +4,21 @@ import openSocket from 'socket.io-client';
 import {BrowserRouter,Switch, Route, Redirect} from 'react-router-dom';
 
 import Login from './Components/Login';
-import Menu from './Components/Menu';
+import Dashboard from './Components/Dashboard';
+import Header from './Components/Header';
 
 function App() {
 
   return (
     <div>
       <BrowserRouter>
+        <Header></Header>
+
+      
         <Switch>
           <Route path='/login' exact component={Login} />
-          <Route path='/menu' exact component={Menu} />
-          <Redirect to='/login'/>
+          <Route path='/dashboard' exact component={Dashboard} />
+          <Redirect to='/dashboard'/>
         </Switch>
       </BrowserRouter>      
     </div>

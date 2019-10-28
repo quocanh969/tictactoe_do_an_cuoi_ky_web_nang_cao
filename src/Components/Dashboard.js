@@ -1,6 +1,6 @@
 import React from 'react'
 
-class Menu extends React.Component
+class Dashboard extends React.Component
 {
     constructor(props)
     {
@@ -10,9 +10,11 @@ class Menu extends React.Component
     render()
     {
         return(
-            <div>Dashboard work !!!</div>
+            <div>
+                Dashboard work!!!
+            </div>
         );
     }
 }
 
-export default Menu;
+export default Dashboard;
