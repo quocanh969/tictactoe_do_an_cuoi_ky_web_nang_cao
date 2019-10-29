@@ -1,6 +1,8 @@
 import React from 'react';
 import {NavLink} from 'react-router-dom';
 
+import tictactoe_background from '../Assets/img/tictactoe-background-2.png';
+
 import '../index.css';
 class Login extends React.Component
 {
@@ -40,53 +42,60 @@ class Login extends React.Component
     render()
     {
         return(
-            <div style={{paddingTop: '100px', textAlign: 'center'}}>   
-                <h3 className="font-weight-bold mb-5">Please login to play TIC TAC TOE game</h3>     
-                <div className="cart my-login-cart mx-auto">
-                <div className="card-header login-header my-bg">LOGIN</div>
-                <div className="card-body">
-                    <form onSubmit={this.handleSubmit}>
-                        <div className="form-group row">
-                            <label htmlFor="username" className="pr-0 col-3 col-form-label">
-                                Username
-                            </label>
-                            <div className="col-9">
-                                <input 
-                                    name="name"
-                                    type="text" 
-                                    className="form-control" 
-                                    id="username" 
-                                    onChange={this.handleChange}
-                                />
-                            </div>
-                        </div>
+            <div style={{paddingTop: '100px'}} className="container">   
+                <div className="row">
+                    <div className="col-7">
+                        <img className="image-background" src={tictactoe_background} alt="Tic Tac Toe Background"></img>
+                    </div>
+                    <div className="col">
+                        <h4 className="font-weight-bold mb-5">Please login to play TIC TAC TOE game</h4>
+                        <div className="cart my-login-cart mx-auto">
+                            <div className="card-header login-header bg-365e46">LOGIN</div>
+                            <div className="card-body bg-365e46">
+                                <form onSubmit={this.handleSubmit}>
+                                    <div className="form-group row">
+                                        <label htmlFor="username" className="text-white font-weight-bold pr-0 col-3 col-form-label">
+                                            Username
+                                        </label>
+                                        <div className="col-9">
+                                            <input 
+                                                name="name"
+                                                type="text" 
+                                                className="form-control" 
+                                                id="username" 
+                                                onChange={this.handleChange}
+                                            />
+                                        </div>
+                                    </div>
 
-                        <div className="form-group row">
-                            <label className="pr-0 col-3 col-form-label" htmlFor="password">
-                                Password
-                            </label>
-                            <div className="col-9">
-                                <input 
-                                    name="password"
-                                    type="text" 
-                                    className="form-control" 
-                                    id="password"                                     
-                                    onChange={this.handleChange}
-                                />
+                                    <div className="form-group row">
+                                        <label className="text-white font-weight-bold pr-0 col-3 col-form-label" htmlFor="password">
+                                            Password
+                                        </label>
+                                        <div className="col-9">
+                                            <input 
+                                                name="password"
+                                                type="text" 
+                                                className="form-control" 
+                                                id="password"                                     
+                                                onChange={this.handleChange}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="form-group row justify-content-end mr-2">
+                                        <button className="btn btn-warning text-white mx-2 my-bg text-light" type="submit">
+                                            Login
+                                        </button>
+                                        <NavLink to="/menu">
+                                            <button className="btn btn-default mx2">
+                                                Register
+                                            </button>
+                                        </NavLink>                
+                                    </div>              
+                                </form>       
                             </div>
                         </div>
-                        <div className="form-group row justify-content-end mr-2">
-                            <button className="btn btn-warning text-white mx-2 my-bg text-light" type="submit">
-                                Login
-                            </button>
-                            <NavLink to="/menu">
-                                <button className="btn btn-default mx2">
-                                    Register
-                                </button>
-                            </NavLink>                
-                        </div>              
-                    </form>       
-                </div>
+                    </div>
                 </div>
             </div>
         );

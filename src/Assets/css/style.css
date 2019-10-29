@@ -1,29 +1,81 @@
-.bg-d35400
+.bg-365e46
 {
-    background-color: #d35400;
+    background-color: #365e46;
 }
 
-.bg-e28636
+.bg-55e890
 {
-    background-color: #e28636;
+  background-color: #55e890;
 }
 
 .bg-transparent
 {
+    background-color: transparent !important;
+}
+
+.image-background
+{
+  width: 90%;
+
+  box-shadow: 30px 30px 10px grey;
+}
+
+.btn:hover{
+  background-color: #4ac47b;
+  border-color: #4ac47b;
+}
+
+.card
+{
     background-color: transparent;
+}
+
+.border-365e46
+{
+    border: solid 10px #365e46;
+    border-radius: 10px;
 }
 
 .font-25
 {
-    font-size: 25px;
+  font-size: 25px;
+}
+
+.font-20
+{
+  font-size: 20px;
 }
 
 .cursor-pointer
 {
-    cursor: pointer;
+  cursor: pointer;
 }
-
+/* Hình ảnh */
 .logo
 {
-    width: 100px;
+  width: 200px;
 }
+
+.user-logo
+{
+  width: 200px;
+}
+
+.gamemode-logo
+{
+  width:200px;    
+}
+
+table
+{
+    table-layout: fixed;
+    white-space: normal !important;
+}
+
+table td
+{
+    word-wrap: break-word;
+    
+}
+
+/* Hover animation */

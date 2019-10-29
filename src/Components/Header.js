@@ -10,9 +10,7 @@ class Header extends React.Component
         super(props);
 
         this.state = {
-            user:{
-                name: 'Trần Quốc Anh',
-            },
+            user:null,
         }
     }
 
@@ -32,7 +30,7 @@ class Header extends React.Component
                             data-toggle="dropdown">                            
                         </button>
                         <div className="dropdown-menu">
-                            <a className="dropdown-item" href="#">Personal Info</a>
+                            <a className="dropdown-item">Personal Info</a>
                             <div className="dropdown-divider"></div>
                             <NavLink to="/login">
                                 <button className="btn btn-default">
@@ -48,13 +46,17 @@ class Header extends React.Component
         else
         {
             return(                
-                <div className="col row justify-content-end">
-                    <div className="mx-0 cursor-pointer px-3 font-weight-bold align-self-center">
-                        LOGIN
-                    </div>
-                    <div className="mx-0 cursor-pointer px-3 font-weight-bold align-self-center">
-                        REGISTER
-                    </div>
+                <div className="col row align-items-center ml-3">
+                    <NavLink to="/login">
+                        <div className="mx-0 px-3 font-weight-bold text-white">
+                            LOGIN
+                        </div>
+                    </NavLink>
+                    <NavLink to="/register">
+                        <div className="mx-0 px-3 font-weight-bold text-white">
+                            REGISTER
+                        </div>
+                    </NavLink>
                 </div>                
             );
         }
@@ -63,11 +65,13 @@ class Header extends React.Component
     render()
     {    
         return(
-            <div className="container-fluid bg-e28636 py-2">
+            <div className="container-fluid bg-365e46 py-3">
                 <div className="container text-white">
                     <div className="row">
                         <div className="col-9 font-weight-bold border-right border-light">
-                            <img className="logo cursor-pointer" src={logo} alt="logo"></img>
+                            <NavLink to="/dashboard">
+                                <img className="logo cursor-pointer" src={logo} alt="logo"></img>
+                            </NavLink>
                         </div>   
                         {this.generateUserOptions()}   
                     </div>
