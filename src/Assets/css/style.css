@@ -36,6 +36,12 @@
     border-radius: 10px;
 }
 
+.border-transparent
+{
+    border: solid 1px transparent;
+    border-radius: 10px;
+}
+
 .font-25
 {
   font-size: 25px;
@@ -44,6 +50,11 @@
 .font-20
 {
   font-size: 20px;
+}
+
+.h-5px
+{
+  height: 5px;
 }
 
 .cursor-pointer
