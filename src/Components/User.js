@@ -73,9 +73,9 @@ class User extends React.Component
                                         <input 
                                             name="age"
                                             type="number" 
-                                            className="form-control"
-                                            min="1930"
-                                            id="age"                                     
+                                            className="form-control"                                            
+                                            id="age"
+                                            min="1"                                     
                                             onChange={this.handleChange}
                                         />
                                     </div>

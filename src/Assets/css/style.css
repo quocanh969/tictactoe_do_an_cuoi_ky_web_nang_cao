@@ -16,8 +16,6 @@
 .image-background
 {
   width: 90%;
-
-  box-shadow: 30px 30px 10px grey;
 }
 
 .btn:hover{
@@ -89,28 +87,28 @@ table td
     
 }
 
+.border-15px-365e46
+{
+  border: 15px solid #365e46;
+  border-radius: 10px;
+}
+
 /* Hover animation */
 
 /* PlayGround CSS */
-.text-mycolor{
-  color: #d35400 !important;
-}
-
-.bg-mycolor{
-  color: #d35400;
+table
+{
+  table-layout: fixed;
 }
 
 .my-btn{
-  color: #c0392b !important;
+  color: red !important;
 
   padding: 5px;
   font-size: 15px;
 }
 
-.board{    
-  border: 15px solid #f8c291;
-  border-radius: 10px; 
-
+.board{   
   min-width: 730px;
   
   padding: 0px;    
@@ -119,10 +117,6 @@ table td
 .board-row{
   margin: 0;
   padding: 0;
-}
-
-.cursor-pointer{
-  cursor: pointer;
 }
 
 .square{   
@@ -137,8 +131,6 @@ table td
   border: 0.5px solid black;        
 
   font-weight: bold;
-
-  
 }
 
 .square-normal{
@@ -157,19 +149,9 @@ table td
 }
 
 .status{
-  background-color: white;
-  border: 10px solid #f8c291;
+  background-color: white;  
   border-radius: 10px;
   padding: 10px;
-}
-
-.title{
-  font-weight: bold;
-  text-align: center;
-}
-
-.title h1{
-  color: red;
 }
 
 .alert{
@@ -179,10 +161,7 @@ table td
   font-size: 20px;
 }
 
-.history-table{
-  border: 10px solid #f8c291;
-  border-radius: 10px; 
-  
+.history-table{ 
   width: 100%;    
   height: 200px;
 

@@ -1,5 +1,6 @@
 import React from 'react';
-import Square from './Square'
+import Square from './Square';
+import logo from '../Assets/img/tic-tac-toe-logo.png';
 
 function winnerCondition(squares,i)
 {   
@@ -566,7 +567,7 @@ class Playground extends React.Component
         }   
         
 
-        return <div className="history-table mt-2"><table cellSpacing="0" cellPadding="5"><thead><tr className="border-bottom border-black bg-secondary text-white"><th>Move#</th><th>Player</th><th>Row</th><th>Column</th></tr></thead><tbody>{table}</tbody></table></div>
+        return <div className="history-table mt-2 border-15px-365e46"><table cellSpacing="0" cellPadding="5"><thead><tr className="border-bottom border-black bg-secondary text-white"><th>Move#</th><th>Player</th><th>Row</th><th>Column</th></tr></thead><tbody>{table}</tbody></table></div>
     }
 
     render() {
@@ -598,11 +599,11 @@ class Playground extends React.Component
         {
             if(this.state.isP1Win)
             {
-                notice = <div className="alert alert-success">Player One Win !!!</div>
+                notice = <div className="alert alert-danger">Player One Win !!!</div>
             }
             else
             {
-                notice = <div className="alert alert-success">Player Two Win !!!</div>
+                notice = <div className="alert alert-danger">Player Two Win !!!</div>
             }
             type = <h3 className="text-center">--*****--</h3>
         }
@@ -622,33 +623,33 @@ class Playground extends React.Component
         }
 
         return (
-        <div className="container">            
+        <div className="container mt-5">            
             <div className="row">
                 <div className="col-8">
-                    <div className="board">
+                    <div className="board border-15px-365e46">
                         {this.createTable()}                        
                     </div>                    
                 </div>
-                <div className="col mt-2">
-                    <div className="title status">
-                        <h2>GAME</h2>
-                        <h1>Tic-Tac-Toe</h1>
-                        <h3>(20x20)</h3>
+                <div className="col">
+                    <div className="font-weight-bold text-center status border-15px-365e46 py-4">
+                        <img src={logo} alt="Tic Tac Toe Logo" className="logo"></img>
                     </div>
-                    <div className="status my-2">
+                    <div className="status my-2 border-15px-365e46">
                         {notice}
                     </div>
-                    <div className="status my-2">
+                    <div className="status my-2 border-15px-365e46">
                         {type}
                     </div>
-                    <button className="btn btn-danger my-2" onClick={()=>this.handleRestartClick()}>RESTART</button>
+
+                    <button className="btn btn-danger w-100 font-weight-bold my-2" onClick={()=>this.handleRestartClick()}>RESTART</button>
                     <div className="d-flex justify-content-between mt-3">
-                        <h4 className="text-center text-mycolor">HISTORY MOVE LIST</h4>
+                        <h4 className="text-center text-danger font-weight-bold">HISTORY MOVE LIST</h4>
                         <div className="btn-group btn-group-toggle">
                             <button className={DESClass} onClick={()=>this.handleDESSortClick()}>&#8595; DESC</button>
                             <button className={ASCClass} onClick={()=>this.handleASCSortClick()}> ASC &#8593;</button>                            
                         </div>                        
-                    </div>                    
+                    </div>   
+
                     {this.createHistoryTable()}
                 </div>
             </div>

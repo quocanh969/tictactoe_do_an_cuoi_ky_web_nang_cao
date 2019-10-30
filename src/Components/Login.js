@@ -1,7 +1,7 @@
 import React from 'react';
 import {NavLink} from 'react-router-dom';
 
-import tictactoe_background from '../Assets/img/tictactoe-background-2.png';
+import login_background from '../Assets/img/login-background.png';
 
 import '../index.css';
 class Login extends React.Component
@@ -45,7 +45,7 @@ class Login extends React.Component
             <div style={{paddingTop: '100px'}} className="container">   
                 <div className="row">
                     <div className="col-7">
-                        <img className="image-background" src={tictactoe_background} alt="Tic Tac Toe Background"></img>
+                        <img className="image-background" src={login_background} alt="Tic Tac Toe Background"></img>
                     </div>
                     <div className="col">
                         <h4 className="font-weight-bold mb-5">Please login to play TIC TAC TOE game</h4>
@@ -83,11 +83,11 @@ class Login extends React.Component
                                         </div>
                                     </div>
                                     <div className="form-group row justify-content-end mr-2">
-                                        <button className="btn btn-warning text-white mx-2 my-bg text-light" type="submit">
+                                        <button className="btn btn-danger text-white mx-2 text-light" type="submit">
                                             Login
                                         </button>
                                         <NavLink to="/menu">
-                                            <button className="btn btn-default mx2">
+                                            <button className="btn btn-light mx-2">
                                                 Register
                                             </button>
                                         </NavLink>                
