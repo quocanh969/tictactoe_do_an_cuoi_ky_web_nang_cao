@@ -18,11 +18,6 @@
   width: 90%;
 }
 
-.btn:hover{
-  background-color: #4ac47b;
-  border-color: #4ac47b;
-}
-
 .card
 {
     background-color: transparent;
@@ -53,6 +48,16 @@
 .h-5px
 {
   height: 5px;
+}
+
+.h-200px
+{
+  height: 200px;
+}
+
+.h-250px
+{
+  height: 250px;
 }
 
 .cursor-pointer
@@ -91,6 +96,21 @@ table td
 {
   border: 15px solid #365e46;
   border-radius: 10px;
+}
+
+.btn-facebook
+{
+  background-color: #4267B2;
+}
+
+.btn-google
+{
+  background-color: #EF3C27;
+}
+
+textarea
+{
+  min-height: 30px;
 }
 
 /* Hover animation */
@@ -162,8 +182,7 @@ table
 }
 
 .history-table{ 
-  width: 100%;    
-  height: 200px;
+  width: 100%;      
 
   background-color: white;      
 
@@ -173,3 +192,36 @@ table
 .history-table table{    
   width: 100%;
 }
+
+/* Chat box */
+.chatbox
+{
+  width:100%;     
+  height: 200px;      
+  padding: 10px 0;
+}
+
+.chatbox .messages
+{  
+  height:170px;
+  overflow: auto;
+  padding: 10px;
+}
+
+.rounded-pill
+{
+  border: 0.1 solid transparent;
+  border-radius: 10px;
+}
+
+.input-container
+{
+  height: 50px;            
+  padding: 10px;
+}
+
+.input-container .form-control
+{
+  resize: none;
+}
+

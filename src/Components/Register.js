@@ -49,10 +49,9 @@ class Register extends React.Component
                     <div className="col-7">
                         <img className="image-background mt-5" src={register_background} alt="Tic Tac Toe Background"></img>
                     </div>
-                    <div className="col">
-                        <h5 className="font-weight-bold mb-5 text-center">Please register to play TIC TAC TOE game</h5>
+                    <div className="col">                        
                         <div className="cart my-login-cart mx-auto">
-                            <div className="card-header login-header bg-365e46">LOGIN</div>
+                            <div className="card-header login-header text-center bg-danger border-light">REGISTER</div>
                             <div className="card-body bg-365e46">
                                 <form onSubmit={this.handleSubmit}>
                                     <div className="form-group row">
@@ -157,14 +156,15 @@ class Register extends React.Component
                                         </div>
                                     </div>   
 
-                                    <div className="form-group row justify-content-end mr-2 mt-4">
-                                        <button className="btn btn-danger text-white mx-2 font-weight-bold" type="submit">
+                                    <div className="form-group d-flex justify-content-between mx-1">
+                                        <button style={{width:'49%'}} className="btn btn-danger text-white font-weight-bold" type="submit">
                                             Register
                                         </button>                                        
-                                        <button className="btn btn-light mx-2 font-weight-bold">
+                                        <button style={{width:'49%'}} className="btn btn-light font-weight-bold">
                                             Cancel
-                                        </button>                                        
-                                    </div>             
+                                        </button>                                            
+                                    </div>   
+
                                 </form>       
                             </div>
                         </div>

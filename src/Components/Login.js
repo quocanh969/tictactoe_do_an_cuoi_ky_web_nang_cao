@@ -47,10 +47,9 @@ class Login extends React.Component
                     <div className="col-7">
                         <img className="image-background" src={login_background} alt="Tic Tac Toe Background"></img>
                     </div>
-                    <div className="col">
-                        <h4 className="font-weight-bold mb-5">Please login to play TIC TAC TOE game</h4>
+                    <div className="col">                        
                         <div className="cart my-login-cart mx-auto">
-                            <div className="card-header login-header bg-365e46">LOGIN</div>
+                            <div className="card-header login-header bg-danger text-center border-light">LOGIN</div>
                             <div className="card-body bg-365e46">
                                 <form onSubmit={this.handleSubmit}>
                                     <div className="form-group row">
@@ -82,16 +81,36 @@ class Login extends React.Component
                                             />
                                         </div>
                                     </div>
-                                    <div className="form-group row justify-content-end mr-2">
-                                        <button className="btn btn-danger text-white mx-2 text-light" type="submit">
+                                    <div className="form-group d-flex justify-content-between mx-1">
+                                        <button style={{width:'49%'}} className="btn btn-danger text-white font-weight-bold" type="submit">
                                             Login
                                         </button>
-                                        <NavLink to="/menu">
-                                            <button className="btn btn-light mx-2">
-                                                Register
-                                            </button>
-                                        </NavLink>                
-                                    </div>              
+                                        <div style={{width:'49%'}}>
+                                            <NavLink to="/register">
+                                                <button  className="btn btn-light w-100 font-weight-bold">
+                                                    Register
+                                                </button>
+                                            </NavLink>      
+                                        </div>
+                                    </div>     
+
+                                    <div className="text-center text-light my-5">
+                                        <hr className="border-light"/>
+                                        <span>
+                                            Or login with
+                                        </span>
+                                        <hr className="border-light"/>
+                                    </div>
+
+                                    <button className="text-white btn btn-facebook text-center w-100 my-2">
+                                        <i class="fab fa-facebook-square mr-3"></i>
+                                        <span>Facebook</span>
+                                    </button>
+
+                                    <button className="text-white btn btn-google text-center w-100 my-2">
+                                        <i className="fab fa-google mr-3"></i>
+                                        <span>Google</span>
+                                    </button>
                                 </form>       
                             </div>
                         </div>

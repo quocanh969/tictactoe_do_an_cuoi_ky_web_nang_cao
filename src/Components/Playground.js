@@ -324,10 +324,13 @@ function winnerCondition(squares,i)
 }
 
 class Playground extends React.Component
-{
+{    
     constructor() {
         super();
-        this.state = {
+        this.state = {            
+            isBotMode: false,
+            isChatBoxOpen: false,
+
             squares: Array(400).fill({value:null,class:'square square-normal'}),
             historyMove: [{
                 step:0,
@@ -567,7 +570,168 @@ class Playground extends React.Component
         }   
         
 
-        return <div className="history-table mt-2 border-15px-365e46"><table cellSpacing="0" cellPadding="5"><thead><tr className="border-bottom border-black bg-secondary text-white"><th>Move#</th><th>Player</th><th>Row</th><th>Column</th></tr></thead><tbody>{table}</tbody></table></div>
+        return <table style={{width:'100%'}} cellSpacing="0" cellPadding="5"><thead><tr className="border-bottom border-black bg-secondary text-white"><th>Move#</th><th>Player</th><th>Row</th><th>Column</th></tr></thead><tbody>{table}</tbody></table>
+    }
+
+    generateChatBox()
+    {
+        return(
+            <div class="chatbox mt-0">    
+                <div class="messages">
+                    <div>
+                        <p class="rounded-pill">                
+                        </p>                    
+                    </div>            
+                </div>
+                
+                <span>&nbsp;</span>
+                <div class="input-group mb-3 border-top border-dark input-container">
+                    <textarea type="text" rows="1" class="form-control" placeholder="Nhập tin nhắn ..." ></textarea>              
+                    <div class="input-group-append">
+                    <button class="btn btn-danger" type="button">
+                        Gửi
+                    </button>
+                    </div>
+                </div>          
+            </div>
+        );
+    }
+
+    generateHistoryChat(DESClass,ASCClass)
+    {
+        
+        if(this.state.isChatBoxOpen)
+        {
+            return(
+                <div>{this.generateChatBox()}</div>
+            );            
+        }
+        else
+        {
+            return(
+                <div>
+                    <div className="btn-group btn-group-toggle w-100 my-1">
+                        <button className={DESClass} onClick={()=>this.handleDESSortClick()}>&#8595; DESC</button>
+                        <button className={ASCClass} onClick={()=>this.handleASCSortClick()}> ASC &#8593;</button>                            
+                    </div> 
+                    <div className="history-table h-200px">
+                        {this.createHistoryTable()}
+                    </div>
+                </div>                
+            );
+        }
+    }
+
+    generateTurnPlayer()
+    {
+        if(this.state.turn_p1)
+        {
+            return(
+                <div className="font-weight-bold text-center status border-15px-365e46 py-4">                  
+                    <h2 className="text-danger">Player 1: O</h2>
+                    <h5 className="text-primary">VS</h5>
+                    <h2>Player 2: X</h2>
+                </div>
+            );
+        }
+        else
+        {
+            return(
+                <div className="font-weight-bold text-center status border-15px-365e46 py-4">                  
+                    <h2>Player 1: O</h2>
+                    <h5 className="text-primary">VS</h5>
+                    <h2 className="text-danger">Player 2: X</h2>
+                </div>
+            );
+        }
+    }
+
+    generateInfoMatch(notice,type,DESClass,ASCClass)
+    {
+        if(!this.state.isBotMode)
+        {
+            let chatClass;
+            let historyClass;
+
+            if(this.state.isChatBoxOpen)
+            {
+                chatClass='nav-link cursor-pointer active';
+                historyClass='nav-link cursor-pointer';
+            }
+            else
+            {
+                chatClass='nav-link cursor-pointer';
+                historyClass='nav-link cursor-pointer active';
+            }
+
+            return(
+                // vs Human mode
+                <div className="col">
+                    {this.generateTurnPlayer()}
+
+                    <div className="status my-2 border-15px-365e46">
+                        <ul className="nav nav-tabs">
+                            <li className="nav-item">
+                                <a className={chatClass} onClick={()=>{this.setState({isChatBoxOpen:true})}}>Chat</a>
+                            </li>
+                            <li className="nav-item">
+                                <a className={historyClass} onClick={()=>{this.setState({isChatBoxOpen:false})}}>History</a>
+                            </li>
+                        </ul>
+                        <div className="h-250px">
+                            {this.generateHistoryChat(DESClass,ASCClass)}
+                        </div>
+                    </div>
+
+                    <button className="btn btn-dark w-100 d-flex font-weight-bold my-2 align-items-center">
+                        <i className="fa fa-undo pull-left "></i>
+                        <span className="mx-auto">UNDO</span>
+                    </button>
+                    <div className="d-flex justify-content-around mt-3">
+                        <button style={{width:'49%'}} className="btn btn-info d-flex font-weight-bold align-items-center">
+                            <i className="fa fa-handshake pull-left "></i>                             
+                            <span className="mx-auto">SEND DRAW</span>
+                        </button>
+                        <button style={{width:'49%'}} className="btn btn-danger d-flex font-weight-bold align-items-center">
+                            <i className="fa fa-flag pull-left "></i>
+                            <span className="mx-auto">GIVE UP</span>
+                        </button>                                             
+                    </div>   
+                </div>
+            );
+        }
+        else
+        {
+            return(
+                // vs Bot mode
+                <div className="col">
+                    <div className="font-weight-bold text-center status border-15px-365e46 py-4">
+                        <img src={logo} alt="Tic Tac Toe Logo" className="logo"></img>
+                    </div>
+                    <div className="status my-2 border-15px-365e46">
+                        {notice}
+                    </div>
+                    <div className="status my-2 border-15px-365e46">
+                        {type}
+                    </div>
+
+                    <button className="btn btn-danger d-flex align-items-center w-100 font-weight-bold my-2" onClick={()=>this.handleRestartClick()}>
+                        <i className="fa fa-undo pull-left"></i>
+                        <span className="mx-auto">RESTART</span>
+                    </button>
+                    <div className="d-flex justify-content-between mt-3">
+                        <h4 className="text-center text-danger font-weight-bold">HISTORY MOVE</h4>
+                        <div className="btn-group btn-group-toggle">
+                            <button className={DESClass} onClick={()=>this.handleDESSortClick()}>&#8595; DESC</button>
+                            <button className={ASCClass} onClick={()=>this.handleASCSortClick()}> ASC &#8593;</button>                            
+                        </div>                        
+                    </div>   
+                    <div className="history-table h-250px mt-2 border-15px-365e46">
+                        {this.createHistoryTable()}
+                    </div>
+                </div>
+            );            
+        }
     }
 
     render() {
@@ -630,28 +794,7 @@ class Playground extends React.Component
                         {this.createTable()}                        
                     </div>                    
                 </div>
-                <div className="col">
-                    <div className="font-weight-bold text-center status border-15px-365e46 py-4">
-                        <img src={logo} alt="Tic Tac Toe Logo" className="logo"></img>
-                    </div>
-                    <div className="status my-2 border-15px-365e46">
-                        {notice}
-                    </div>
-                    <div className="status my-2 border-15px-365e46">
-                        {type}
-                    </div>
-
-                    <button className="btn btn-danger w-100 font-weight-bold my-2" onClick={()=>this.handleRestartClick()}>RESTART</button>
-                    <div className="d-flex justify-content-between mt-3">
-                        <h4 className="text-center text-danger font-weight-bold">HISTORY MOVE LIST</h4>
-                        <div className="btn-group btn-group-toggle">
-                            <button className={DESClass} onClick={()=>this.handleDESSortClick()}>&#8595; DESC</button>
-                            <button className={ASCClass} onClick={()=>this.handleASCSortClick()}> ASC &#8593;</button>                            
-                        </div>                        
-                    </div>   
-
-                    {this.createHistoryTable()}
-                </div>
+                {this.generateInfoMatch(notice,type,DESClass,ASCClass)}
             </div>
         </div>
         );
