@@ -7,24 +7,18 @@ import againstBot from '../Assets/img/play-again-bot.jpg';
 import againstHuman from '../Assets/img/play-against-human.png';
 
 class Dashboard extends React.Component
-{
-    constructor(props)
-    {
-        super(props);
-
-        this.state = {
-            user:{
-                name: 'Trần Quốc Anh',
-                email: 'tranquocanh858@gmail.com',
-                win: 50,
-                draw: 0,
-                lost: 50,
-            }
-        }
-    }
-
+{   
     render()
     {
+        const user = {
+            name: 'Trần Quốc Anh',
+            email: 'tranquocanh858@gmail.com',
+            win: 50,
+            draw: 0,
+            lost: 50,
+        }
+        
+        let { onPlayBotMode,onPlayPVPMode } = this.props;
         return(
             <div className="container mt-5">
                 <div className="row">
@@ -36,30 +30,32 @@ class Dashboard extends React.Component
                         <hr className="border-light"/>      
                         
                         <table style={{width: '100%'}} cellPadding={0} cellSpacing={0}>
-                            <tr>
-                                <td className="font-weight-bold align-top" style={{width: '35%'}}>NAME:</td>
-                                <td>{this.state.user.name}</td>                                
-                            </tr>
-                            <tr>
-                                <td className="font-weight-bold align-top">EMAIL:</td>
-                                <td className="text-wrap">{this.state.user.email}</td>                                
-                            </tr>
-                            <tr>
-                                <td className="font-weight-bold align-top">WIN:</td>
-                                <td>{this.state.user.win}</td>                                
-                            </tr>
-                            <tr>
-                                <td className="font-weight-bold align-top">DRAW:</td>
-                                <td>{this.state.user.draw}</td>                                
-                            </tr>
-                            <tr>
-                                <td className="font-weight-bold align-top">LOST:</td>
-                                <td>{this.state.user.lost}</td>                                
-                            </tr>
+                            <tbody>
+                                <tr>
+                                    <td className="font-weight-bold align-top" style={{width: '35%'}}>NAME:</td>
+                                    <td>{user.name}</td>                                
+                                </tr>
+                                <tr>
+                                    <td className="font-weight-bold align-top">EMAIL:</td>
+                                    <td className="text-wrap">{user.email}</td>                                
+                                </tr>
+                                <tr>
+                                    <td className="font-weight-bold align-top">WIN:</td>
+                                    <td>{user.win}</td>                                
+                                </tr>
+                                <tr>
+                                    <td className="font-weight-bold align-top">DRAW:</td>
+                                    <td>{user.draw}</td>                                
+                                </tr>
+                                <tr>
+                                    <td className="font-weight-bold align-top">LOST:</td>
+                                    <td>{user.lost}</td>                                
+                                </tr>
+                            </tbody>
                         </table>                             
 
                         <NavLink to="/user">
-                            <button className="btn btn-default mt-3 w-100 text-white font-weight-bold font-25">SEE MORE</button>
+                            <button className="btn btn-default mt-3 w-100 text-white font-weight-bold font-25" onClick={()=>{console.log("see more !!!")}}>SEE MORE</button>
                         </NavLink>                        
                     </div>
                     
@@ -72,7 +68,7 @@ class Dashboard extends React.Component
                                     Your mission is play tic tac toe and have a win against our talent robot ...
                                 </p>
                                 <NavLink to="/playground">
-                                    <a className="btn btn-danger font-weight-bold w-100 text-center text-white">PLAY !!!</a>
+                                    <button className="btn btn-danger font-weight-bold w-100 text-center text-white" onClick={()=>{onPlayBotMode()}}>PLAY !!!</button>
                                 </NavLink>
                             </div>
                         </div>
@@ -83,13 +79,13 @@ class Dashboard extends React.Component
                         <div className="card border-0">
                             <img src={againstHuman} className="card-img-top" alt="Play against human"></img>
                             <div className="card-body bg-transparent">
-                                <h5 className="card-title">Play against people !</h5>
+                                <h5 className="card-title">Play versus Player !</h5>
                                 <p className="card-text">
                                     Your mission is play tic tac toe and have a win against other player to find out who is the best tic tac toe player ...
                                 </p>
 
                                 <NavLink to="/playground">
-                                    <a className="btn btn-danger font-weight-bold w-100 text-center text-white">PLAY !!!</a>
+                                    <button className="btn btn-danger font-weight-bold w-100 text-center text-white" onClick={()=>{onPlayPVPMode()}}>PLAY !!!</button>
                                 </NavLink>
                             </div>
                         </div>

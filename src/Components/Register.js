@@ -5,17 +5,18 @@ import register_background from '../Assets/img/register-background.jpg';
 
 class Register extends React.Component
 {
-    constructor(props)
-    {
-        super(props);
+    user = {
+        username: '',
+        password: '',
+        email: '',
+        yob: 0,
+        gender: true,
+        address: '',
+    }
 
-        this.state = {
-            name: '',
-            password: '',
-            confirm:'',
-            email:'',
-            yearOfBirth:0,
-        }
+    constructor()
+    {
+        super();
 
         this.handleSubmit = this.handleSubmit.bind(this); // handle submit
         this.handleChange = this.handleChange.bind(this);
@@ -23,22 +24,14 @@ class Register extends React.Component
 
     handleChange(e)
     {
-        this.setState({
-            [e.target.name]:e.target.value,
-        })
+        this.user[e.target.name] = e.target.value;   
     }
 
     handleSubmit(e)
     {
         e.preventDefault();
-        console.log('login: ');
-        const {name, password} = this.state;
-
-        if(name && password)
-        {
-            console.log('User: ');
-            console.log({name,password});
-        }
+        console.log('register: ');
+        console.log(this.user);
     }
 
     render()
@@ -60,7 +53,7 @@ class Register extends React.Component
                                         </label>
                                         <div className="col-9">
                                             <input 
-                                                name="name"
+                                                name="username"
                                                 type="text" 
                                                 className="form-control" 
                                                 id="username" 
@@ -76,7 +69,7 @@ class Register extends React.Component
                                         <div className="col-9">
                                             <input 
                                                 name="password"
-                                                type="text" 
+                                                type="password" 
                                                 className="form-control" 
                                                 id="password"                                     
                                                 onChange={this.handleChange}
@@ -115,16 +108,16 @@ class Register extends React.Component
                                     </div>
 
                                     <div className="form-group row">
-                                        <label htmlFor="age" className="text-white font-weight-bold pr-0 col-5 col-form-label">
+                                        <label htmlFor="yob" className="text-white font-weight-bold pr-0 col-5 col-form-label">
                                             Year of Birth
                                         </label>
                                         <div className="col-7">
                                             <input 
-                                                name="age"
+                                                name="yob"
                                                 type="number" 
                                                 className="form-control" 
                                                 min="1930"
-                                                id="age" 
+                                                id="yob" 
                                                 onChange={this.handleChange}
                                             />
                                         </div>                                        
@@ -135,9 +128,8 @@ class Register extends React.Component
                                             Gender   
                                         </label>
                                         <div className="col-9">
-                                            <select className="custom-select" name="gender" id="gender">
-                                                <option defaultValue>Choose...</option>
-                                                <option value={true}>Male</option>
+                                            <select className="custom-select" name="gender" id="gender" onChange={this.handleChange}>                                                
+                                                <option value={true} defaultValue>Male</option>
                                                 <option value={false}>Female</option>                                        
                                             </select>
                                         </div>
@@ -151,7 +143,8 @@ class Register extends React.Component
                                             <textarea 
                                                 name="address"                                        
                                                 className="form-control" 
-                                                id="address"                                                                             
+                                                id="address" 
+                                                onChange={this.handleChange}                                                                            
                                             />
                                         </div>
                                     </div>   

@@ -2,490 +2,21 @@ import React from 'react';
 import Square from './Square';
 import logo from '../Assets/img/tic-tac-toe-logo.png';
 
-function winnerCondition(squares,i)
-{   
-    // Kiểm tra hàng dọc    
-    let chessNum = 1;
-    let TwoSideChecked = 0;
-    let res = [];
 
-    for(let j = 1;j<5;j++)
-    {
-        if(i-j*20 >=0)
-        {
-            if(squares[i].value === squares[i-j*20].value)
-            {
-                chessNum++;                         
-                if(chessNum === 5)
-                {           
-                    if(
-                        (i-5*20 <0 || (squares[i-5*20].value !== squares[i].value && squares[i-5*20].value !== null))
-                        && (i+20 >= 400 || (squares[i+20].value !== squares[i].value && squares[i+20].value !== null))
-                    )
-                    {   
-                        return null;                 
-                    }     
-
-                    // Thắng lơi                    
-                    for(var t = 0;t<5;t++)
-                    {                        
-                        res.push(i-t*20);
-                    }
-                    
-                    return res.reverse();
-                }
-            }    
-            else if(squares[i-j*20].value !== null)        
-            {                
-                TwoSideChecked++;
-                break;
-            }
-            else
-            {
-                break;
-            }
-        }
-        else
-        {            
-            TwoSideChecked++;
-            break;
-        }
-    }
-    for(let j = 1;j<5;j++)
-    {
-        if(i + j*20 < 400 && squares[i].value === squares[i+j*20].value)
-        {
-            chessNum++;                    
-            if(chessNum === 5)
-            {
-                if(i+(j+1)*20 >= 400 || (squares[i+(j+1)*20].value!==squares[i].value && squares[i+(j+1)*20].value!==null))
-                {
-                    if(TwoSideChecked === 1)
-                    {                        
-                        return null;
-                    }
-                }
-
-                // Thắng lơi
-                
-                let r = i+j*20;
-                for(t = 0;t<5;t++)
-                {                    
-                    res.push(r-t*20);
-                }          
-                    
-                return res.reverse();
-            }
-        }
-        else
-        {
-            break;
-        }
-    }
-    
-    // Kiểm tra hàng ngang
-    chessNum = 1;
-    TwoSideChecked = 0;
-    for(let j = 1;j<5;j++)
-    {
-        if(i%20 - j >=0)
-        {
-            if(squares[i].value === squares[i-j].value)
-            {
-                chessNum++;                         
-                if(chessNum === 5)
-                {           
-                    if(
-                        (i%20-5 < 0 || (squares[i-5].value !== squares[i].value && squares[i-5].value !== null))
-                        && (i%20+1 >= 20 || (squares[i+1].value !== squares[i].value && squares[i+1].value !== null))
-                    )
-                    {                        
-                        return null;                
-                    }   
-                    // Thắng lơi
-                    
-                    let r = i;
-                    for(t = 0;t<5;t++)
-                    {                        
-                        res.push(r-t);
-                    } 
-                           
-                    return res.reverse();
-                }
-            }    
-            else if(squares[i-j].value !== null)        
-            {                
-                TwoSideChecked++;
-                break;
-            }
-            else
-            {
-                break;
-            }
-        }
-        else
-        {            
-            TwoSideChecked++;
-            break;
-        }
-    }
-    for(let j = 1;j<5;j++)
-    {
-        if(i%20 + j < 20 && squares[i].value === squares[i+j].value)
-        {
-            chessNum++;                    
-            if(chessNum === 5)
-            {
-                if(i%20+j+1 >= 20 || (squares[i+j+1].value!==squares[i].value && squares[i+j+1].value!==null))
-                {
-                    if(TwoSideChecked === 1)
-                    {                        
-                        return null;
-                    }
-                }
-
-                // Thắng lơi
-                
-                let r = i+j;
-                for(t = 0;t<5;t++)
-                {                    
-                    res.push(r-t);
-                } 
-                       
-                return res.reverse();
-            }
-        }
-        else
-        {
-            break;
-        }
-    }
-
-    // Kiểm tra chéo trái
-    chessNum = 1;
-    TwoSideChecked = 0;
-    for(let j = 1;j<5;j++)
-    {
-        if(i%20-j >=0 && i-j-j*20 >=0)
-        {
-            if(squares[i].value === squares[i-j-j*20].value)
-            {
-                chessNum++;                         
-                if(chessNum === 5)
-                {           
-                    if(
-                        (i%20-5 < 0 || i-5*20 <0 || (squares[i-5-5*20].value !== squares[i].value && squares[i-5-5*20].value !== null))
-                        && (i%20+1 >= 20 || i+20>=400 || (squares[i+1+20].value !== squares[i].value && squares[i+1+20].value !== null))
-                    )
-                    {
-                        return null;                    
-                    }     
-
-                    // Thắng lơi
-                    
-                    let r = i;
-                    for(t = 0;t<5;t++)
-                    {                        
-                        res.push(r-t-t*20);
-                    } 
-                         
-                    return res.reverse();
-                }
-            }    
-            else if(squares[i-j-j*20].value !== null)        
-            {                
-                TwoSideChecked++;
-                break;
-            }
-            else
-            {
-                break;
-            }
-        }
-        else
-        {            
-            TwoSideChecked++;
-            break;
-        }
-    }
-    for(let j = 1;j<5;j++)
-    {        
-        if(i%20+j<20 && i+j+j*20 < 400 && squares[i].value === squares[i+j+j*20].value)
-        {
-            chessNum++;                    
-            if(chessNum === 5)
-            {
-                if(i%20+j+1 >= 20 || i+(j+1)*20>=400
-                    || (squares[i+j+1+(j+1)*20].value!==squares[i].value && squares[i+j+1+(j+1)*20].value!==null))
-                {
-                    if(TwoSideChecked === 1)
-                    {                        
-                        return null;
-                    }
-                }
-
-                // Thắng lơi
-                
-                let r = i+j+j*20;
-                for(t = 0;t<5;t++)
-                {                        
-                    res.push(r-t-t*20);
-                } 
-                        
-                return res.reverse();
-            }
-        }
-        else
-        {
-            break;
-        }
-    }
-
-    // Kiểm tra chéo phải
-    chessNum = 1;
-    TwoSideChecked = 0;
-    for(let j = 1;j<5;j++)
-    {
-        if(i%20+j<20 && i+j-j*20 >= 0)
-        {
-            if(squares[i].value === squares[i+j-j*20].value)
-            {
-                chessNum++;                         
-                if(chessNum === 5)
-                {           
-                    if(
-                        (i%20+5 >= 20 || i-5*20 < 0 || (squares[i+5-5*20].value !== squares[i].value && squares[i+5-5*20].value !== null))
-                        && (i%20-1 < 0 || i+20 >= 400 || (squares[i-1+20].value !== squares[i].value && squares[i-1+20].value !== null))
-                    )
-                    {                        
-                        return null;                    
-                    }     
-
-                    // Thắng lơi
-                    
-                    let r = i;
-                    for(t = 0;t<5;t++)
-                    {
-                        res.push(r+t-t*20);                        
-                    }       
-                     
-                    return res.reverse();
-                }
-            }    
-            else if(squares[i+j-j*20].value !== null)        
-            {                
-                TwoSideChecked++;
-                break;
-            }
-            else
-            {
-                break;
-            }
-        }
-        else
-        {            
-            TwoSideChecked++;
-            break;
-        }
-    }
-    for(let j = 1;j<5;j++)
-    {
-        if(i%20-j>=0 && i-j+j*20 < 400 && squares[i].value === squares[i-j+j*20].value)
-        {
-            chessNum++;                    
-            if(chessNum === 5)
-            {
-                if(i%20-j-1 < 0 || i+(j+1)*20>=400
-                    || (squares[i-(j+1)+(j+1)*20].value!==squares[i].value && squares[i-(j+1)+(j+1)*20].value!==null))
-                {
-                    if(TwoSideChecked === 1)
-                    {                        
-                        return null;
-                    }
-                }
-
-                // Thắng lơi
-                
-                let r = i-j+j*20;
-                for(t = 0;t<5;t++)
-                {
-                    res.push(r+t-t*20);                        
-                }       
-                    
-                return res.reverse();
-            }
-        }
-        else
-        {
-            break;
-        }
-    }
-    return null;
-}
 
 class Playground extends React.Component
-{    
-    constructor() {
-        super();
-        this.state = {            
-            isBotMode: false,
-            isChatBoxOpen: false,
-
-            squares: Array(400).fill({value:null,class:'square square-normal'}),
-            historyMove: [{
-                step:0,
-                winnerMove:[],
-                index: null,
-                currentMove:null,                
-                squares:Array(400).fill({value:null,class:'square square-normal'}),
-            }],
-            winnerMove:[],
-            selectedStep: 0,
-            currentMove: null,            
-            turn_p1: true,
-            isASC:false,
-            isOver: 0,
-            isP1Win: false,
-        };
-        
-    }
-
-    handleClick(i) {
-        
-        if(this.state.isOver === 0) // Kiểm tra kết thúc ván đấu
-        {
-            if(this.state.squares[i].value === null) // Kiểm tra xem đã đánh chưa
-            {
-                const squares = this.state.squares.slice();
-                const history = this.state.historyMove.slice(0,this.state.selectedStep + 1);
-                const length = history.length;
-
-                if(this.state.turn_p1)
-                {   
-                    squares[this.state.currentMove] = {value:'O',class:'square square-normal'}
-                    squares[i] = {value:'X',class:'square square-current'};                    
-                }
-                else
-                {
-                    squares[this.state.currentMove] = {value:'X',class:'square square-normal'}
-                    squares[i] = {value:'O',class:'square square-current'};
-                }
-
-                // Cập nhật lịch sử                
-                history.push({
-                    step:length,    
-                    winnerMove:[],                                    
-                    index: i,
-                    currentMove:i,
-                    squares:squares,
-                });
-
-                this.setState({
-                    historyMove:history,
-                    selectedStep:length,
-                    squares: squares,                      
-                    currentMove: i, // Cập nhật lại nước đi
-                    turn_p1: !this.state.turn_p1,
-                },
-                ()=>{          
-                    let res = winnerCondition(squares,i);
-                    if(res !== null)
-                    {
-                        history[length].winnerMove = res;
-                        if(this.state.turn_p1)
-                        {                            
-                            this.setState({
-                                winnerMove: res,
-                                historyTable: history,
-                                isOver: 1,
-                                isP1Win: false,
-                            })
-                        }
-                        else
-                        {                            
-                            this.setState({     
-                                winnerMove: res,     
-                                historyTable: history,                      
-                                isOver: 1,
-                                isP1Win: true,
-                            })
-                        }
-                    }
-                    else if(this.state.historyMove.length - 1 === 400)
-                    {
-                        this.setState({
-                            isOver: 2,
-                        })
-                    }
-                    else
-                    {
-                        // do nothing
-                        this.setState({                            
-                            isOver: 0,
-                        })
-                    }                    
-                });
-            }
-        }       
-        
-    }
-
-    handleTimeTravelClick(item)
-    {   
-        this.setState({
-            winnerMove: item.winnerMove,
-            selectedStep: item.step,
-            squares: item.squares,
-            currentMove: item.currentMove,
-            isOver: (item.winnerMove.length === 5) ? 1 : ((item.step === 400) ? 2 : 0),
-            turn_p1: (item.step%2) === 0,
-        })
-    }
-
-    handleASCSortClick()
+{  
+    componentWillMount()
     {
-        if(!this.state.isASC)
-        {
-            this.setState({
-                isASC: true,
-            })
-        }        
-    }
-
-    handleDESSortClick()
-    {
-        if(this.state.isASC)
-        {
-            this.setState({
-                isASC: false,
-            })
-        }        
-    }
-
-    handleRestartClick()
-    {
-        this.setState({
-            squares: Array(400).fill({value:null,class:'square square-normal'}),
-            historyMove: [{
-                step:0,
-                winnerMove:[],
-                index: null,
-                currentMove:null,                
-                squares:Array(400).fill({value:null,class:'square square-normal'}),
-            }],
-            winnerMove:[],
-            selectedStep: 0,
-            currentMove: null,            
-            turn_p1: true,
-            isASC:false,
-            isOver: 0,
-            isP1Win: false,
-        })
+        this.props.onRestart();
     }
 
     createTable = () => {
+        let { squares, winnerMove } = this.props.PlaygroundReducer;
+        let { onMoveOnBotmode } = this.props;
+
         let winnerPos = 0;
-        let table = []
+        let table = [];
 
         // Outer loop to create parent
         for (let i = 0; i < 20; i++) {
@@ -493,25 +24,25 @@ class Playground extends React.Component
             //Inner loop to create children
             for (let j = 0; j < 20; j++) {                
                 
-                if(this.state.squares[20*i+j].value !== null)
+                if(squares[20*i+j].value !== null)
                 {             
-                    if(winnerPos < 5 && this.state.winnerMove[winnerPos] === i*20+j)
+                    if(winnerPos < 5 && winnerMove[winnerPos] === i*20+j)
                     {
                         children.push(
-                            <Square key={20*i+j} onClick={()=>this.handleClick(20*i+j)} value={this.state.squares[20*i+j].value} className="square square-winnerMove"/>
+                            <Square key={20*i+j} onClick={()=>onMoveOnBotmode(20*i+j)} value={squares[20*i+j].value} className="square square-winnerMove"/>
                         )
                         winnerPos += 1;
                     }
                     else
                     {
                         children.push(
-                            <Square key={20*i+j} onClick={()=>this.handleClick(20*i+j)} value={this.state.squares[20*i+j].value} className={this.state.squares[20*i+j].class}/>
+                            <Square key={20*i+j} onClick={()=>onMoveOnBotmode(20*i+j)} value={squares[20*i+j].value} className={squares[20*i+j].class}/>
                         )
                     }
                 }
                 else
                 {
-                    children.push(<Square key={20*i+j} onClick={()=>this.handleClick(20*i+j)} value={'\u00A0'} className={this.state.squares[20*i+j].class}/>)
+                    children.push(<Square key={20*i+j} onClick={()=>onMoveOnBotmode(20*i+j)} value={'\u00A0'} className={squares[20*i+j].class}/>)
                 } 
             }
 
@@ -521,12 +52,15 @@ class Playground extends React.Component
         return table
     }
 
-    createHistoryTable = () =>{
-        const historyTable = this.state.historyMove.slice();
+    createHistoryTable = () =>{        
+        let { isASC, selectedStep, historyMove } = this.props.PlaygroundReducer;
+        let { onBack2History } = this.props;
+
+        const historyTable = historyMove.slice();
         
 
         // Kiểm tra hình thức sort là tăng dần hay giảm dần theo thời gian đánh nước đó
-        if(!this.state.isASC)
+        if(!isASC)
         {
             historyTable.reverse();            
         }
@@ -537,34 +71,34 @@ class Playground extends React.Component
         {         
             row = Math.floor(historyTable[i].index / 20) + 1;
             column = historyTable[i].index % 20 + 1;            
-            if(this.state.selectedStep === historyTable[i].step)
+            if(selectedStep === historyTable[i].step)
             {
                 if(historyTable[i].step === 0)
                 {
-                    table.push(<tr className="cursor-pointer font-weight-bold border-bottom border-black" key={i} onClick={()=>this.handleTimeTravelClick(historyTable[i])}><td>{historyTable[i].step}</td><td colSpan="3">GAME START</td></tr>)
+                    table.push(<tr className="cursor-pointer font-weight-bold border-bottom border-black" key={i} onClick={()=>onBack2History(historyTable[i])}><td>{historyTable[i].step}</td><td colSpan="3">GAME START</td></tr>)
                 }
                 else if(historyTable[i].step % 2 !== 0)
                 {
-                    table.push(<tr className="cursor-pointer font-weight-bold border-bottom border-black" key={i} onClick={()=>this.handleTimeTravelClick(historyTable[i])}><td>{historyTable[i].step}</td><td>P1</td><td>{row}</td><td>{column}</td></tr>)
+                    table.push(<tr className="cursor-pointer font-weight-bold border-bottom border-black" key={i} onClick={()=>onBack2History(historyTable[i])}><td>{historyTable[i].step}</td><td>P1</td><td>{row}</td><td>{column}</td></tr>)
                 }
                 else
                 {
-                    table.push(<tr className="cursor-pointer font-weight-bold border-bottom border-black" key={i} onClick={()=>this.handleTimeTravelClick(historyTable[i])}><td>{historyTable[i].step}</td><td>P2</td><td>{row}</td><td>{column}</td></tr>)
+                    table.push(<tr className="cursor-pointer font-weight-bold border-bottom border-black" key={i} onClick={()=>onBack2History(historyTable[i])}><td>{historyTable[i].step}</td><td>P2</td><td>{row}</td><td>{column}</td></tr>)
                 }
             }            
             else
             {
                 if(historyTable[i].step === 0)
                 {
-                    table.push(<tr className="cursor-pointer border-bottom border-black" key={i} onClick={()=>this.handleTimeTravelClick(historyTable[i])}><td>{historyTable[i].step}</td><td colSpan="3">GAME START</td></tr>)
+                    table.push(<tr className="cursor-pointer border-bottom border-black" key={i} onClick={()=>onBack2History(historyTable[i])}><td>{historyTable[i].step}</td><td colSpan="3">GAME START</td></tr>)
                 }
                 else if(historyTable[i].step % 2 !== 0)
                 {
-                    table.push(<tr className="cursor-pointer border-bottom border-black" key={i} onClick={()=>this.handleTimeTravelClick(historyTable[i])}><td>{historyTable[i].step}</td><td>P1</td><td>{row}</td><td>{column}</td></tr>)
+                    table.push(<tr className="cursor-pointer border-bottom border-black" key={i} onClick={()=>onBack2History(historyTable[i])}><td>{historyTable[i].step}</td><td>P1</td><td>{row}</td><td>{column}</td></tr>)
                 }
                 else
                 {
-                    table.push(<tr className="cursor-pointer border-bottom border-black" key={i} onClick={()=>this.handleTimeTravelClick(historyTable[i])}><td>{historyTable[i].step}</td><td>P2</td><td>{row}</td><td>{column}</td></tr>)
+                    table.push(<tr className="cursor-pointer border-bottom border-black" key={i} onClick={()=>onBack2History(historyTable[i])}><td>{historyTable[i].step}</td><td>P2</td><td>{row}</td><td>{column}</td></tr>)
                 }
             }            
         }   
@@ -599,8 +133,10 @@ class Playground extends React.Component
 
     generateHistoryChat(DESClass,ASCClass)
     {
+        let { isChatBoxOpen } = this.props.PlaygroundReducer;
+        let { onToggleSort } = this.props;
         
-        if(this.state.isChatBoxOpen)
+        if(isChatBoxOpen)
         {
             return(
                 <div>{this.generateChatBox()}</div>
@@ -611,8 +147,8 @@ class Playground extends React.Component
             return(
                 <div>
                     <div className="btn-group btn-group-toggle w-100 my-1">
-                        <button className={DESClass} onClick={()=>this.handleDESSortClick()}>&#8595; DESC</button>
-                        <button className={ASCClass} onClick={()=>this.handleASCSortClick()}> ASC &#8593;</button>                            
+                        <button className={DESClass} onClick={()=>{onToggleSort(false)}}>&#8595; DESC</button>
+                        <button className={ASCClass} onClick={()=>{onToggleSort(true)}}> ASC &#8593;</button>                            
                     </div> 
                     <div className="history-table h-200px">
                         {this.createHistoryTable()}
@@ -624,7 +160,8 @@ class Playground extends React.Component
 
     generateTurnPlayer()
     {
-        if(this.state.turn_p1)
+        let { turnP1 } = this.props.PlaygroundReducer;
+        if(turnP1)
         {
             return(
                 <div className="font-weight-bold text-center status border-15px-365e46 py-4">                  
@@ -647,13 +184,17 @@ class Playground extends React.Component
     }
 
     generateInfoMatch(notice,type,DESClass,ASCClass)
-    {
-        if(!this.state.isBotMode)
+    {        
+        let { isChatBoxOpen } = this.props.PlaygroundReducer;
+        let { isBotMode } = this.props.DashboardReducer;
+        let { onToggleChatBox, onRestart, onToggleSort } = this.props;        
+
+        if(!isBotMode)
         {
             let chatClass;
             let historyClass;
 
-            if(this.state.isChatBoxOpen)
+            if(isChatBoxOpen)
             {
                 chatClass='nav-link cursor-pointer active';
                 historyClass='nav-link cursor-pointer';
@@ -666,16 +207,17 @@ class Playground extends React.Component
 
             return(
                 // vs Human mode
+                
                 <div className="col">
                     {this.generateTurnPlayer()}
 
                     <div className="status my-2 border-15px-365e46">
                         <ul className="nav nav-tabs">
                             <li className="nav-item">
-                                <a className={chatClass} onClick={()=>{this.setState({isChatBoxOpen:true})}}>Chat</a>
+                                <a className={chatClass} onClick={()=>{onToggleChatBox(false)}}>Chat</a>
                             </li>
                             <li className="nav-item">
-                                <a className={historyClass} onClick={()=>{this.setState({isChatBoxOpen:false})}}>History</a>
+                                <a className={historyClass} onClick={()=>{onToggleChatBox(true)}}>History</a>
                             </li>
                         </ul>
                         <div className="h-250px">
@@ -698,6 +240,7 @@ class Playground extends React.Component
                         </button>                                             
                     </div>   
                 </div>
+                
             );
         }
         else
@@ -715,15 +258,15 @@ class Playground extends React.Component
                         {type}
                     </div>
 
-                    <button className="btn btn-danger d-flex align-items-center w-100 font-weight-bold my-2" onClick={()=>this.handleRestartClick()}>
+                    <button className="btn btn-danger d-flex align-items-center w-100 font-weight-bold my-2" onClick={()=>{onRestart()}}>
                         <i className="fa fa-undo pull-left"></i>
                         <span className="mx-auto">RESTART</span>
                     </button>
                     <div className="d-flex justify-content-between mt-3">
                         <h4 className="text-center text-danger font-weight-bold">HISTORY MOVE</h4>
                         <div className="btn-group btn-group-toggle">
-                            <button className={DESClass} onClick={()=>this.handleDESSortClick()}>&#8595; DESC</button>
-                            <button className={ASCClass} onClick={()=>this.handleASCSortClick()}> ASC &#8593;</button>                            
+                            <button className={DESClass} onClick={()=>{onToggleSort(false)}}>&#8595; DESC</button>
+                            <button className={ASCClass} onClick={()=>{onToggleSort(true)}}> ASC &#8593;</button>                            
                         </div>                        
                     </div>   
                     <div className="history-table h-250px mt-2 border-15px-365e46">
@@ -741,8 +284,11 @@ class Playground extends React.Component
 
         let ASCClass,DESClass;
 
+        let {isASC, isOver, isP1Win, turnP1} = this.props.PlaygroundReducer;
+
+
         // Sắp xếp lịch sử nước đi
-        if(this.state.isASC)
+        if(isASC)
         {
             ASCClass = "btn btn-warning font-weight-bold my-btn active";
             DESClass = "btn btn-warning font-weight-bold my-btn";
@@ -754,14 +300,14 @@ class Playground extends React.Component
         }
 
         // Kiểm tra trò chơi kết thúc
-        if(this.state.isOver === 2)
+        if(isOver === 2)
         {
             notice = <div className="alert alert-danger">DRAW - Nobody win !!!</div>
             type = <h3 className="text-center">--*****--</h3>
         }
-        else if(this.state.isOver === 1)
+        else if(isOver === 1)
         {
-            if(this.state.isP1Win)
+            if(isP1Win)
             {
                 notice = <div className="alert alert-danger">Player One Win !!!</div>
             }
@@ -773,7 +319,7 @@ class Playground extends React.Component
         }
         else
         {   
-            if(this.state.turn_p1)
+            if(turnP1)
             {
                 status = "One";
                 type = <h3>Type: X</h3>;
