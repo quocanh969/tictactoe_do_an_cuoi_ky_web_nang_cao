@@ -6,14 +6,14 @@ import login_background from '../Assets/img/login-background.png';
 import '../index.css';
 class Login extends React.Component
 {
+    user = {
+        username:'',
+        password:'',
+    }
+
     constructor(props)
     {
         super(props);
-
-        this.state = {
-            name: '',
-            password: '',
-        }
 
         this.handleSubmit = this.handleSubmit.bind(this); // handle submit
         this.handleChange = this.handleChange.bind(this);
@@ -21,21 +21,41 @@ class Login extends React.Component
 
     handleChange(e)
     {
-        this.setState({
-            [e.target.name]:e.target.value,
-        })
+        this.user[e.target.name] = e.target.value;
     }
 
     handleSubmit(e)
     {
         e.preventDefault();
-        console.log('login: ');
-        const {name, password} = this.state;
+        
+        let { onLogin } = this.props;
+        onLogin(this.user);
+    }
 
-        if(name && password)
-        {
-            console.log('User: ');
-            console.log({name,password});
+
+    generateNotice()
+    {
+        let { status, message } = this.props.LogInReducer;
+
+        if(status === 0)
+        {         
+            return null;
+        }
+        else if(status === 1)
+        {// Thành công
+            return(
+                <div className="alert alert-success mb-3">
+                    {message}
+                </div>
+            );
+        }
+        else
+        {// Thất bại
+            return(
+                <div className="alert alert-danger mb-3">
+                    {message}
+                </div>
+            );
         }
     }
 
@@ -51,14 +71,16 @@ class Login extends React.Component
                         <div className="cart my-login-cart mx-auto">
                             <div className="card-header login-header bg-danger text-center border-light">LOGIN</div>
                             <div className="card-body bg-365e46">
-                                <form onSubmit={this.handleSubmit}>
+                                {this.generateNotice()}
+                                <form ref="loginForm" onSubmit={this.handleSubmit}>
                                     <div className="form-group row">
                                         <label htmlFor="username" className="text-white font-weight-bold pr-0 col-3 col-form-label">
                                             Username
                                         </label>
                                         <div className="col-9">
                                             <input 
-                                                name="name"
+                                                required
+                                                name="username"
                                                 type="text" 
                                                 className="form-control" 
                                                 id="username" 
@@ -73,8 +95,9 @@ class Login extends React.Component
                                         </label>
                                         <div className="col-9">
                                             <input 
+                                                required
                                                 name="password"
-                                                type="text" 
+                                                type="password" 
                                                 className="form-control" 
                                                 id="password"                                     
                                                 onChange={this.handleChange}
@@ -102,12 +125,12 @@ class Login extends React.Component
                                         <hr className="border-light"/>
                                     </div>
 
-                                    <button className="text-white btn btn-facebook text-center w-100 my-2">
-                                        <i class="fab fa-facebook-square mr-3"></i>
+                                    <button className="text-white font-weight-bold btn btn-facebook text-center w-100 my-2">
+                                        <i className="fab fa-facebook-square mr-3"></i>
                                         <span>Facebook</span>
                                     </button>
 
-                                    <button className="text-white btn btn-google text-center w-100 my-2">
+                                    <button className="text-white font-weight-bold btn btn-google text-center w-100 my-2">
                                         <i className="fab fa-google mr-3"></i>
                                         <span>Google</span>
                                     </button>

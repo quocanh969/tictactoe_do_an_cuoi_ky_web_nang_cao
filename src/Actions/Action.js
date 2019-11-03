@@ -43,9 +43,9 @@ export const HANDO_DRAW = 'SEND_DRAW';
 export const HANDO_GIVE_UP = 'SEND_GIVE_UP';
 
 export const movePVPMode = pos => {
-    return{
-        type: MOVE_PVPMODE,   
-        pos,     
+    return {
+        type: MOVE_PVPMODE,
+        pos,
     }
 }
 
@@ -57,26 +57,26 @@ export const toggleChatBox = isChatBoxOpen => {
 }
 
 export const receiveMessage = () => {
-    return{
-        type: RECEIVE_MESSAGE,        
+    return {
+        type: RECEIVE_MESSAGE,
     }
 }
 
 export const handleUndo = () => {
-    return{
-        type: HANDLE_UNDO,        
+    return {
+        type: HANDLE_UNDO,
     }
 }
 
 export const handleDraw = () => {
-    return{
-        type: HANDO_DRAW,        
+    return {
+        type: HANDO_DRAW,
     }
 }
 
 export const handleGiveUp = () => {
-    return{
-        type: HANDO_GIVE_UP,        
+    return {
+        type: HANDO_GIVE_UP,
     }
 }
 
@@ -113,11 +113,54 @@ export const changePassword = () => {
 }
 
 // Login
-export const LOG_IN = 'LOG_IN';
+export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
+export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
+export const LOG_IN_FAILURE = 'LOG_IN_FAILURE';
 
-export const logIn = () => {
-    return {
-        type: LOG_IN,
+export const logIn = (user) => {
+    return dispatch => {
+        dispatch(request(user));
+        console.log(user);
+        us.login(user)
+            .then(
+                (res) => {                                        
+                    if(res.info.code === 0)
+                    {
+                        dispatch(failure(res.info.message));
+                    }
+                    else if(res.info.code === 1)
+                    {
+                        dispatch(failure(res.info.message));
+                    }
+                    else
+                    {
+                        dispatch(success(res.info.message));
+                        history.push('/');                            
+                    }
+                },
+                (error) => {                    
+                    dispatch(failure('Can not connect to server'));                                        
+                }
+            );
+    };
+
+    function request(user) {
+        return {
+            type: LOG_IN_REQUEST,
+            user,
+        }
+    }
+    function success(message) {
+        return {
+            type: LOG_IN_SUCCESS,
+            message,
+        }
+    }
+    function failure(message) {
+        return {
+            type: LOG_IN_FAILURE,
+            message,
+        }
     }
 }
 
@@ -132,40 +175,47 @@ export const register = (user) => {
         dispatch(request(user));
 
         us.register(user)
-        .then(
-            user => {
-                dispatch(success());
-                console.log('Đăng ký thành công !!!');
-            },
-            error => {
-                dispatch(failure(error.toString()));
-                console.log('Đăng ký thất bại !!!');
-            }
-        )        
+            .then(
+                res => {
+                    if (res.code === 1) {
+                        dispatch(success(res.message));
+                    }
+                    else {
+                        dispatch(failure(res.message));
+                    }
+                },
+                (error) => {
+                    dispatch(failure('Can not connect to server'));
+                }
+            )
 
     }
 
-
-    function request(user)
-    {
+    function request(user) {
         return {
             type: REGISTER_REQUEST,
             user
         }
     }
 
-    function success()
-    {
+    function success(message) {
         return {
             type: REGISTER_SUCCESS,
+            message
         }
     }
 
-    function failure(error)
-    {
+    function failure(message) {
         return {
             type: REGISTER_FAILURE,
-            error
+            message
         }
+    }
+}
+
+export const noticeFail = message => {
+    return {
+        type: REGISTER_FAILURE,
+        message,
     }
 }

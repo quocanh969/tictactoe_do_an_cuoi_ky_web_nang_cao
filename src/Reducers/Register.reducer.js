@@ -1,24 +1,36 @@
 import { REGISTER_REQUEST, REGISTER_SUCCESS, REGISTER_FAILURE } from '../Actions/Action';
 
 const initState = {
-    username: '',
-    password: '',
-    email: '',
-    yob: 0,
-    gender: true,
-    address: '',
+  status: 0,
+  message: '',
+  loading: false,
 }
 
-function RegisterReducer(state = {}, action) {
+function RegisterReducer(state = initState, action) {
   switch (action.type) {
     case REGISTER_REQUEST:
-      return {};
+      return {
+        ...state,
+        status: 0,
+        message: '',
+        loading: true,
+      };
     case REGISTER_SUCCESS:
-      return {};
+      return {
+        ...state,
+        status: 1,
+        message: action.message,
+        loading: false,
+      };
     case REGISTER_FAILURE:
-      return {};
+      return {
+        ...state,
+        status: -1,
+        message: action.message,
+        loading: false,
+      };
     default:
-      return state
+      return state;
   }
 }
 

@@ -11,7 +11,7 @@ class User extends React.Component
                     <div className="col-5 m-2 bg-365e46 border-365e46 py-3 font-weight-bold text-white font-20 text-center">
                         <img src={userAvatar} style={{width:'80%'}} alt="User Avatar"></img>
 
-                        <div className="mt-4">MATCH: 30</div>
+                        <div className="mt-4">PVP MATCH: 30</div>
 
                         <div className="d-flex justify-content-between mt-4">
                             <div className="p-1 bg-danger border-transparent" style={{width:'30%'}}>
@@ -65,16 +65,16 @@ class User extends React.Component
                                     </div>
                                 </div>          
 
-                                <div className="form-group row">
+                                <div className="form-group row align-items-center">
                                     <label className="text-white font-weight-bold pr-0 col-3 col-form-label" htmlFor="age">
-                                        AGE:   
+                                        YEAR OF BIRTH:   
                                     </label>
                                     <div className="col-3">
                                         <input 
-                                            name="age"
+                                            name="yob"
                                             type="number" 
                                             className="form-control"                                            
-                                            id="age"
+                                            id="yob"
                                             min="1"                                     
                                             onChange={this.handleChange}
                                         />

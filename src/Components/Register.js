@@ -18,6 +18,8 @@ class Register extends React.Component
     {
         super();
 
+        
+
         this.handleSubmit = this.handleSubmit.bind(this); // handle submit
         this.handleChange = this.handleChange.bind(this);
     }
@@ -29,9 +31,44 @@ class Register extends React.Component
 
     handleSubmit(e)
     {
-        e.preventDefault();
-        console.log('register: ');
-        console.log(this.user);
+        e.preventDefault();       
+        
+        if(this.user.password === this.refs.confirm.value)
+        {
+            let {onRegister} = this.props;
+            onRegister(this.user);
+        }
+        else
+        {
+            let { onNoticeFail } = this.props;
+            onNoticeFail('Confirm is not the same as password')
+        }
+    }
+
+    generateNotice()
+    {
+        let { status, message } = this.props.RegisterReducer;
+
+        if(status === 0)
+        {            
+            return null;
+        }
+        else if(status === 1)
+        {// Thành công
+            return(
+                <div className="alert alert-success mb-3">
+                    {message}
+                </div>
+            );
+        }
+        else
+        {// Thất bại
+            return(
+                <div className="alert alert-danger mb-3">
+                    {message}
+                </div>
+            );
+        }
     }
 
     render()
@@ -44,20 +81,22 @@ class Register extends React.Component
                     </div>
                     <div className="col">                        
                         <div className="cart my-login-cart mx-auto">
-                            <div className="card-header login-header text-center bg-danger border-light">REGISTER</div>
+                            <div className="card-header login-header text-center bg-danger border-light">REGISTER</div>                            
                             <div className="card-body bg-365e46">
-                                <form onSubmit={this.handleSubmit}>
+                                {this.generateNotice()}
+                                <form ref="registerForm" onSubmit={this.handleSubmit}>
                                     <div className="form-group row">
                                         <label htmlFor="username" className="text-white font-weight-bold pr-0 col-3 col-form-label">
                                             Username
                                         </label>
                                         <div className="col-9">
                                             <input 
+                                                required
                                                 name="username"
                                                 type="text" 
                                                 className="form-control" 
                                                 id="username" 
-                                                onChange={this.handleChange}
+                                                onChange={this.handleChange}                                                
                                             />
                                         </div>
                                     </div>
@@ -68,6 +107,7 @@ class Register extends React.Component
                                         </label>
                                         <div className="col-9">
                                             <input 
+                                                required
                                                 name="password"
                                                 type="password" 
                                                 className="form-control" 
@@ -83,11 +123,11 @@ class Register extends React.Component
                                         </label>
                                         <div className="col-9">
                                             <input 
-                                                name="confirm"
+                                                required
+                                                ref="confirm"
                                                 type="password" 
                                                 className="form-control" 
-                                                id="confirm" 
-                                                onChange={this.handleChange}
+                                                id="confirm"                                                 
                                             />
                                         </div>
                                     </div>
@@ -98,6 +138,7 @@ class Register extends React.Component
                                         </label>
                                         <div className="col-9">
                                             <input 
+                                                required
                                                 name="email"
                                                 type="email" 
                                                 className="form-control" 
@@ -113,6 +154,7 @@ class Register extends React.Component
                                         </label>
                                         <div className="col-7">
                                             <input 
+                                                required
                                                 name="yob"
                                                 type="number" 
                                                 className="form-control" 
@@ -153,7 +195,7 @@ class Register extends React.Component
                                         <button style={{width:'49%'}} className="btn btn-danger text-white font-weight-bold" type="submit">
                                             Register
                                         </button>                                        
-                                        <button style={{width:'49%'}} className="btn btn-light font-weight-bold">
+                                        <button style={{width:'49%'}} className="btn btn-light font-weight-bold" type="button" onClick={()=>{this.refs.registerForm.reset()}}>
                                             Cancel
                                         </button>                                            
                                     </div>   

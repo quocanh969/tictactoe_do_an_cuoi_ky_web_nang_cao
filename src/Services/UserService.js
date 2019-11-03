@@ -1,11 +1,35 @@
 const ApiUrl = "http://localhost:8080";
 
 export const us = {
+    login,
     register,
+}
+
+function login(user)
+{
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json'},
+        body: JSON.stringify(user)
+    };
+
+    return fetch(`${ApiUrl}/users/login`, requestOptions)
+        .then(handleResponse)
+        .then(user => {  
+            if(user !== false)          
+            {
+                localStorage.setItem('user', JSON.stringify(user));
+                localStorage.setItem('setTimeLogIn',new Date().getTime());                        
+            }
+            
+            return user;
+        });
 }
 
 function register(user)
 {
+    user.name = user.username;    
+    
     const requestOption = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -14,6 +38,7 @@ function register(user)
 
     return fetch(`${ApiUrl}/users/register`,requestOption)
     .then(handleResponse);
+    
 }
 
 function handleResponse(response) {

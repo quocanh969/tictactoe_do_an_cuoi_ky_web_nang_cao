@@ -1,25 +1,28 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
-import { register } from '../Actions/Action';
+import { register,noticeFail } from '../Actions/Action';
 import Register from '../Components/Register';
 
 const mapStateToProps = state => {
-    return state;
+  return state;
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onRegister: user => {
+      dispatch(register(user));
+    },
+    onNoticeFail: message => {
+      dispatch(noticeFail(message));
+    }
   };
-  
-  const mapDispatchToProps = dispatch => {
-    return {
-          onRegister: (name, password, email, YoB, gender, address) => {                        
-              dispatch(register({name, password, email, YoB, gender, address}));                        
-          },
-      };
-  }
-  
-  const RegisterContainer = withRouter(connect(
-      mapStateToProps,
-      mapDispatchToProps
-    )(Register));
-  
-  
-  export default RegisterContainer;
+}
+
+const RegisterContainer = withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Register));
+
+
+export default RegisterContainer;
