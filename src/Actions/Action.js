@@ -215,8 +215,6 @@ export const changeAvatar = (id, url,isUpdateAvatar) => {
             .then(
                 (res) => {
                     if (res.code === 1) {
-                        console.log(url);
-                        console.log('tiến hành cập nhật state');
                         dispatch(success(url));
                     }
                     else {

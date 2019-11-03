@@ -11,9 +11,44 @@ class Playground extends React.Component
         this.props.onRestart();
     }
 
+    handleMove(pos)
+    {        
+        if(this.props.DashboardReducer.isBotMode)
+        {
+            let { onMoveOnBotmode } = this.props;        
+            // Human
+            onMoveOnBotmode(pos);
+            // Bot
+            onMoveOnBotmode(this.findNextMoveForBot(pos));
+        }       
+        else
+        {// Người vs người
+
+        } 
+    }
+
+    findNextMoveForBot(pos)
+    {
+        let { squares } = this.props.PlaygroundReducer;
+        var botPos = pos + 1;
+        if(pos === 399)
+        {
+            botPos = 0;
+        }
+        while(squares[botPos].value !== null)
+        {
+            botPos++;
+
+            if(botPos === 400)
+            {
+                botPos = 0;
+            }
+        }
+        return botPos;
+    }
+
     createTable = () => {
         let { squares, winnerMove } = this.props.PlaygroundReducer;
-        let { onMoveOnBotmode } = this.props;
 
         let winnerPos = 0;
         let table = [];
@@ -29,20 +64,20 @@ class Playground extends React.Component
                     if(winnerPos < 5 && winnerMove[winnerPos] === i*20+j)
                     {
                         children.push(
-                            <Square key={20*i+j} onClick={()=>onMoveOnBotmode(20*i+j)} value={squares[20*i+j].value} className="square square-winnerMove"/>
+                            <Square key={20*i+j} onClick={()=>this.handleMove(20*i+j)} value={squares[20*i+j].value} className="square square-winnerMove"/>
                         )
                         winnerPos += 1;
                     }
                     else
                     {
                         children.push(
-                            <Square key={20*i+j} onClick={()=>onMoveOnBotmode(20*i+j)} value={squares[20*i+j].value} className={squares[20*i+j].class}/>
+                            <Square key={20*i+j} onClick={()=>this.handleMove(20*i+j)} value={squares[20*i+j].value} className={squares[20*i+j].class}/>
                         )
                     }
                 }
                 else
                 {
-                    children.push(<Square key={20*i+j} onClick={()=>onMoveOnBotmode(20*i+j)} value={'\u00A0'} className={squares[20*i+j].class}/>)
+                    children.push(<Square key={20*i+j} onClick={()=>this.handleMove(20*i+j)} value={'\u00A0'} className={squares[20*i+j].class}/>)
                 } 
             }
 
@@ -110,19 +145,19 @@ class Playground extends React.Component
     generateChatBox()
     {
         return(
-            <div class="chatbox mt-0">    
-                <div class="messages">
+            <div className="chatbox mt-0">    
+                <div className="messages">
                     <div>
-                        <p class="rounded-pill">                
+                        <p className="rounded-pill">                
                         </p>                    
                     </div>            
                 </div>
                 
                 <span>&nbsp;</span>
-                <div class="input-group mb-3 border-top border-dark input-container">
-                    <textarea type="text" rows="1" class="form-control" placeholder="Nhập tin nhắn ..." ></textarea>              
-                    <div class="input-group-append">
-                    <button class="btn btn-danger" type="button">
+                <div className="input-group mb-3 border-top border-dark input-container">
+                    <textarea type="text" rows="1" className="form-control" placeholder="Nhập tin nhắn ..." ></textarea>              
+                    <div className="input-group-append">
+                    <button className="btn btn-danger" type="button">
                         Gửi
                     </button>
                     </div>

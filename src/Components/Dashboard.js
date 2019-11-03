@@ -10,13 +10,7 @@ class Dashboard extends React.Component
 {   
     render()
     {
-        const user = {
-            name: 'Trần Quốc Anh',
-            email: 'tranquocanh858@gmail.com',
-            win: 50,
-            draw: 0,
-            lost: 50,
-        }
+        let chosenUser = JSON.parse(localStorage.getItem('user'));
         
         let { onPlayBotMode,onPlayPVPMode } = this.props;
         return(
@@ -25,7 +19,7 @@ class Dashboard extends React.Component
                     
                     <div className="col-3 m-2 bg-365e46 border-365e46 pt-3 text-white font-20">
                         <div className="text-center">
-                            <img src={userLogo} className="user-logo" alt="User logo"/>
+                            <img src={chosenUser.user.loginUser.avatar || userLogo} className="user-logo" alt="User logo"/>
                         </div>     
                         <hr className="border-light"/>      
                         
@@ -33,29 +27,29 @@ class Dashboard extends React.Component
                             <tbody>
                                 <tr>
                                     <td className="font-weight-bold align-top" style={{width: '35%'}}>NAME:</td>
-                                    <td>{user.name}</td>                                
+                                    <td>{chosenUser.user.loginUser.name}</td>                                
                                 </tr>
                                 <tr>
                                     <td className="font-weight-bold align-top">EMAIL:</td>
-                                    <td className="text-wrap">{user.email}</td>                                
+                                    <td className="text-wrap">{chosenUser.user.loginUser.email}</td>                                
                                 </tr>
                                 <tr>
                                     <td className="font-weight-bold align-top">WIN:</td>
-                                    <td>{user.win}</td>                                
+                                    <td>{chosenUser.user.loginUser.win}</td>                                
                                 </tr>
                                 <tr>
                                     <td className="font-weight-bold align-top">DRAW:</td>
-                                    <td>{user.draw}</td>                                
+                                    <td>{chosenUser.user.loginUser.draw}</td>                                
                                 </tr>
                                 <tr>
                                     <td className="font-weight-bold align-top">LOST:</td>
-                                    <td>{user.lost}</td>                                
+                                    <td>{chosenUser.user.loginUser.lost}</td>                                
                                 </tr>
                             </tbody>
                         </table>                             
 
                         <NavLink to="/user">
-                            <button className="btn btn-default mt-3 w-100 text-white font-weight-bold font-25" onClick={()=>{console.log("see more !!!")}}>SEE MORE</button>
+                            <button className="btn btn-default mt-3 w-100 text-white font-weight-bold font-25">SEE MORE</button>
                         </NavLink>                        
                     </div>
                     

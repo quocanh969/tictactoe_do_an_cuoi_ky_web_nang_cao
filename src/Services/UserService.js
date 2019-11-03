@@ -15,7 +15,7 @@ function login(user) {
         body: JSON.stringify(user)
     };
 
-    return fetch(`${ApiUrl}/users/login`, requestOptions)
+    return fetch(`${ApiUrl}/login`, requestOptions)
         .then(handleResponse)
         .then(user => {
             if (user !== false) {
@@ -36,15 +36,19 @@ function register(user) {
         body: JSON.stringify(user),
     };
 
-    return fetch(`${ApiUrl}/users/register`, requestOption)
+    return fetch(`${ApiUrl}/register`, requestOption)
         .then(handleResponse);
 
 }
 
 function update(id, userInfo) {
+    let chosen = JSON.parse(localStorage.getItem('user')); 
     const requestOption = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+            'Content-Type': 'application/json' ,
+            'Authorization': `Bearer ${chosen.token}`,
+        },
         body: JSON.stringify({ id, user: userInfo }),
     };
 
@@ -53,20 +57,28 @@ function update(id, userInfo) {
 }
 
 function changePassword(id, password) {
+    let chosen = JSON.parse(localStorage.getItem('user')); 
     const requestOption = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+            'Content-Type': 'application/json' ,
+            'Authorization': `Bearer ${chosen.token}`,
+        },
         body: JSON.stringify({ id, password }),
     };
 
-    return fetch(`${ApiUrl}/users/update-password`, requestOption)
+    return fetch(`${ApiUrl}/update-password`, requestOption)
         .then(handleResponse);
 }
 
 function changeAvatar(id, url) {
+    let chosen = JSON.parse(localStorage.getItem('user'));    
     const requestOption = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+            'Content-Type': 'application/json' ,
+            'Authorization': `Bearer ${chosen.token}`,
+        },
         body: JSON.stringify({ id, url }),
     };
     console.log('tiến hành gọi API update avatar');
@@ -88,7 +100,6 @@ function handleResponse(response) {
             const error = (data && data.message) || response.statusText;
             return Promise.reject(error);
         }
-
         return data;
     });
 }

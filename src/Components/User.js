@@ -80,9 +80,11 @@ class User extends React.Component {
         ()=>{ // hoàn thành việc upload
             storage.ref('images').child(this.image.name).getDownloadURL()
             .then(
-                (url)=>{
-                    console.log('updload thành công');
+                (url)=>{   
+                    this.chosenUser.user.loginUser.avatar = url;                 
                     this.props.onChangeAvatar(this.chosenUser.user.loginUser.id,url,true);
+
+                    localStorage.setItem('user',JSON.stringify(this.chosenUser));
                 }
             )
         })

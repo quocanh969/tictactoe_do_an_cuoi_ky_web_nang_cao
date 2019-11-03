@@ -1,6 +1,6 @@
 import { PLAY_AGAINST_BOT,PLAY_AGAINST_HUMAN } from '../Actions/Action';
 const initState = {
-    isBotMode: false
+    isBotMode: true,
 }
 
 function DashboardReducer(state = initState, action)

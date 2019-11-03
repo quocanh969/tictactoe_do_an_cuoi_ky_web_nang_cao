@@ -1,5 +1,5 @@
 import React from 'react';
-import openSocket from 'socket.io-client';
+
 
 import { Router, Switch, Route, Redirect } from 'react-router-dom';
 
