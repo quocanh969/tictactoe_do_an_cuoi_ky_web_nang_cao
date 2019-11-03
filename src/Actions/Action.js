@@ -97,18 +97,152 @@ export const playAgainstHuman = () => {
 }
 
 // User
-export const UPDATE_INFO = 'UPDATE_INFO';
-export const CHANGE_PASSWORD = 'CHANGE_PASSWORD';
+export const UPDATE_REQUEST = 'UPDATE_REQUEST';
+export const UPDATE_SUCCESS = 'UPDATE_SUCCESS';
+export const UPDATE_FAILURE = 'UPDATE_FAILURE';
 
-export const updateInfo = () => {
-    return {
-        type: UPDATE_INFO,
+export const CHANGE_PASSWORD_REQUEST = 'CHANGE_PASSWORD_REQUEST';
+export const CHANGE_PASSWORD_SUCCESS = 'CHANGE_PASSWORD_SUCCESS';
+export const CHANGE_PASSWORD_FAILURE = 'CHANGE_PASSWORD_FAILURE';
+
+export const CHANGE_AVATAR = 'CHANGE_AVATAR';
+
+export const updateInfo = (id, user) => {
+    return dispatch => {
+        dispatch(request(user));
+
+        us.update(id, user)
+            .then(
+                (res) => {
+                    if (res.code === 1) {
+                        dispatch(success(res.message));
+                    }
+                    else {
+                        dispatch(failure(res.message));
+                    }
+                },
+                (error) => {
+                    dispatch(failure('Can not connect to server'));
+                }
+            );
+
+    };
+
+    function request(user) {
+        return {
+            type: UPDATE_REQUEST,
+            user,
+        }
+    }
+    function success(message) {
+        return {
+            type: UPDATE_SUCCESS,
+            message,
+        }
+    }
+    function failure(message) {
+        return {
+            type: UPDATE_FAILURE,
+            message,
+        }
     }
 }
 
-export const changePassword = () => {
+export const resetUpdateInfoStatus = () => {
     return {
-        type: CHANGE_PASSWORD,
+        type: UPDATE_REQUEST,
+    }
+}
+
+export const changePassword = (id, password) => {
+    return dispatch => {
+        dispatch(request());
+
+        us.changePassword(id, password)
+            .then(
+                (res) => {
+                    if (res.code === 1) {
+                        dispatch(success(res.message));
+                    }
+                    else {
+                        dispatch(failure(res.message));
+                    }
+                },
+                (error) => {
+                    dispatch(failure('Can not connect to server'));
+                }
+            );
+
+    };
+
+    function request() {
+        return {
+            type: CHANGE_PASSWORD_REQUEST,
+        }
+    }
+    function success(message) {
+        return {
+            type: CHANGE_PASSWORD_SUCCESS,
+            message,
+        }
+    }
+    function failure(message) {
+        return {
+            type: CHANGE_PASSWORD_FAILURE,
+            message,
+        }
+    }
+}
+
+export const noticeChangePasswordFail = message => {
+    return {
+        type: CHANGE_PASSWORD_FAILURE,
+        message,
+    }
+}
+
+export const resetChangePasswordStatus = () => {    
+    return {
+        type: CHANGE_PASSWORD_REQUEST,
+    }
+}
+
+export const changeAvatar = (id, url,isUpdateAvatar) => {
+    return dispatch => {      
+        if(isUpdateAvatar)
+        {
+            us.changeAvatar(id, url)
+            .then(
+                (res) => {
+                    if (res.code === 1) {
+                        console.log(url);
+                        console.log('tiến hành cập nhật state');
+                        dispatch(success(url));
+                    }
+                    else {
+                        alert('Can not update image data to database server');
+                        return {}
+                    }
+                },
+                (error) => {
+                    alert('Can not connect to database server');
+                    return {}
+                }
+            );
+        }
+        else
+        {
+            dispatch(success(url));
+        }
+        
+    };
+
+    function success(url)
+    {
+        return {
+            type: CHANGE_AVATAR,
+            url,
+        }
     }
 }
 
@@ -120,26 +254,22 @@ export const LOG_IN_FAILURE = 'LOG_IN_FAILURE';
 export const logIn = (user) => {
     return dispatch => {
         dispatch(request(user));
-        console.log(user);
         us.login(user)
             .then(
-                (res) => {                                        
-                    if(res.info.code === 0)
-                    {
+                (res) => {
+                    if (res.info.code === 0) {
                         dispatch(failure(res.info.message));
                     }
-                    else if(res.info.code === 1)
-                    {
+                    else if (res.info.code === 1) {
                         dispatch(failure(res.info.message));
                     }
-                    else
-                    {
+                    else {
                         dispatch(success(res.info.message));
-                        history.push('/');                            
+                        history.push('/');
                     }
                 },
-                (error) => {                    
-                    dispatch(failure('Can not connect to server'));                                        
+                (error) => {
+                    dispatch(failure('Can not connect to server'));
                 }
             );
     };
@@ -217,5 +347,24 @@ export const noticeFail = message => {
     return {
         type: REGISTER_FAILURE,
         message,
+    }
+}
+
+// Header
+export const LOG_OUT = "LOG_OUT";
+export const UPDATE_STATUS = "UPDATE_STATUS";
+
+export const logOut = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('setTimeLogIn');
+    return {
+        type: LOG_OUT,
+    }
+}
+
+export const updateStatus = login => {
+    return {
+        type: UPDATE_STATUS,
+        login
     }
 }

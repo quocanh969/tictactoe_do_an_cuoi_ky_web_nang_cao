@@ -3,25 +3,40 @@ import logo from '../Assets/img/tic-tac-toe-logo.png';
 import {NavLink} from 'react-router-dom';
 import '../Assets/css/style.css';
 
-class Header extends React.Component
-{
-    constructor(props)
-    {
-        super(props);
 
-        this.state = {
-            user:null,
+
+class Header extends React.Component
+{    
+
+    componentWillMount()
+    {
+        let user = JSON.parse(localStorage.getItem('user'));
+        let { onUpdateStatus } = this.props;
+        if(user === null || user.user === false)
+        {
+            onUpdateStatus(false);
         }
+        else
+        {
+            onUpdateStatus(true);
+        }
+    }
+
+    logOut()
+    {
+        let { onLogOut } = this.props;
+        onLogOut();
     }
 
     generateUserOptions()
     {
-        if(this.state.user !== null)
+        let user = JSON.parse(localStorage.getItem('user'));
+        if(user !== null && user.user !== false)
         {    
             return(      
                 <div className="col row justify-content-end">
                     <div className="mx-0 px-3 font-weight-bold font-25 align-self-center">
-                        {this.state.user.name}
+                        {user.user.loginUser.name}
                     </div>
                     <div className="btn-group bg-transparent">
                         <button 
@@ -30,14 +45,15 @@ class Header extends React.Component
                             data-toggle="dropdown">                            
                         </button>
                         <div className="dropdown-menu">
-                            <a className="dropdown-item">Personal Info</a>
+                            <NavLink to="/user">
+                                <button className="btn btn-default">Personal Info</button>
+                            </NavLink>
                             <div className="dropdown-divider"></div>
                             <NavLink to="/login">
-                                <button className="btn btn-default">
+                                <button className="btn btn-default" onClick={()=>{this.logOut()}}>
                                     Log Out
                                 </button>
                             </NavLink>
-                            
                         </div>
                     </div>     
                 </div>                         

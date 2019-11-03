@@ -37,19 +37,7 @@ class Login extends React.Component
     {
         let { status, message } = this.props.LogInReducer;
 
-        if(status === 0)
-        {         
-            return null;
-        }
-        else if(status === 1)
-        {// Thành công
-            return(
-                <div className="alert alert-success mb-3">
-                    {message}
-                </div>
-            );
-        }
-        else
+        if(status === -1)
         {// Thất bại
             return(
                 <div className="alert alert-danger mb-3">

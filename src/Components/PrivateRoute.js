@@ -9,7 +9,7 @@ export const PrivateRoute = ({ component: Component, ...rest }) => {
                 let setupTime = localStorage.getItem('setTimeLogIn');
                 let now = new Date().getTime();
 
-                if (user && setupTime - now < 3 * 24 * 60 * 60 * 1000) {
+                if (user && user.user !== false && setupTime - now < 3 * 24 * 60 * 60 * 1000) {
                     return (
                         <Component {...props}></Component>
                     );
@@ -38,18 +38,18 @@ export const PrivateRoute = ({ component: Component, ...rest }) => {
 export const LoginRoute = ({ component: Component, ...rest }) => {
     return (
         <Route {...rest} render={
-            (props) => {
+            (props) => {                
                 return (// kiểm tra xem đã có thông tin người dùng trong localStorage chưa
                     localStorage.getItem('user')
                         ? <Redirect to={
-                            {
-                                pathname: '/login',
-                                state: {
-                                    from: props.location,
+                                {
+                                    pathname: '/dashboard',
+                                    state: {
+                                        from: props.location,
+                                    }
                                 }
                             }
-                        }
-                        ></Redirect>
+                            ></Redirect>
                         : <Component {...props}></Component>
                 );
             }

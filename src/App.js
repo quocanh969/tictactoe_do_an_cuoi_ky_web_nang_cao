@@ -3,9 +3,6 @@ import openSocket from 'socket.io-client';
 
 import { Router, Switch, Route, Redirect } from 'react-router-dom';
 
-import Login from './Components/Login';
-import Header from './Components/Header';
-import User from './Components/User';
 
 import { history } from './Helpers/History';
 import DashboardContainer from './Containers/Dashboard.container';
@@ -14,6 +11,8 @@ import RegisterContainer from './Containers/Register.container';
 import LogInContainer from './Containers/Login.container';
 
 import { PrivateRoute, LoginRoute } from './Components/PrivateRoute';
+import HeaderContainer from './Containers/Header.container';
+import UserContainer from './Containers/User.container';
 
 function App() {
   // Khởi tạo history  
@@ -21,13 +20,13 @@ function App() {
     <div>
       <Router history={history}>
 
-        <Header></Header>
+        <HeaderContainer></HeaderContainer>
 
         <Switch>
           <LoginRoute path='/login' exact component={LogInContainer}></LoginRoute>
-          <Route path='/register' exact component={RegisterContainer} />
+          <LoginRoute path='/register' exact component={RegisterContainer}></LoginRoute>
           <PrivateRoute path="/dashboard" exact component={DashboardContainer}></PrivateRoute>
-          <PrivateRoute path="/user" exact component={User}></PrivateRoute>          
+          <PrivateRoute path="/user" exact component={UserContainer}></PrivateRoute>          
           <Route path='/playground' exact component={PlaygroundContainer} />
           <Redirect to='/dashboard' />
         </Switch>
