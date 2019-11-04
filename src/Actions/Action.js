@@ -1,4 +1,5 @@
 import { us } from '../Services/UserService';
+import { socketService } from '../Helpers/Socket';
 import { history } from '../Helpers/History';
 // Playground
 export const TOGGLE_SORT = 'TOGGLE_SORT';
@@ -90,9 +91,10 @@ export const playAgainstBot = () => {
     }
 }
 
-export const playAgainstHuman = () => {
+export const playAgainstHuman = (id, name) => {
+    socketService.joinGame(id,name);
     return {
-        type: PLAY_AGAINST_HUMAN,
+        type: PLAY_AGAINST_HUMAN,        
     }
 }
 

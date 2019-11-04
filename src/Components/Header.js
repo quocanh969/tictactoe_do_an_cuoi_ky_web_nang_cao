@@ -3,7 +3,7 @@ import logo from '../Assets/img/tic-tac-toe-logo.png';
 import {NavLink} from 'react-router-dom';
 import '../Assets/css/style.css';
 
-
+var socket;
 
 class Header extends React.Component
 {    
@@ -97,4 +97,4 @@ class Header extends React.Component
     }
 }
 
-export default Header;
+export default {Header,socket};

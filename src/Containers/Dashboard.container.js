@@ -14,8 +14,8 @@ const mapDispatchToProps = dispatch => {
         onPlayBotMode: () => {
             dispatch(playAgainstBot());
         },
-        onPlayPVPMode: () => {
-            dispatch(playAgainstHuman());
+        onPlayPVPMode: (id,name) => {
+            dispatch(playAgainstHuman(id,name));
         },
     }
 }

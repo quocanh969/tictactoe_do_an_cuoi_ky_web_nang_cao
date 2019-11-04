@@ -5,6 +5,7 @@ import RegisterReducer from './Register.reducer';
 import LogInReducer from './Login.reducer';
 import HeaderReducer from './Header.reducer';
 import UserReducer from './User.reducer';
+import SocketReducer from './Socket.reducer';
 
 const myReducer = combineReducers(
     {
@@ -14,6 +15,7 @@ const myReducer = combineReducers(
         LogInReducer,
         HeaderReducer,        
         UserReducer,
+        SocketReducer,
     }
 );
 

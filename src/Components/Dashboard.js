@@ -8,6 +8,7 @@ import againstHuman from '../Assets/img/play-against-human.png';
 
 class Dashboard extends React.Component
 {   
+    
     render()
     {
         let chosenUser = JSON.parse(localStorage.getItem('user'));
@@ -79,7 +80,7 @@ class Dashboard extends React.Component
                                 </p>
 
                                 <NavLink to="/playground">
-                                    <button className="btn btn-danger font-weight-bold w-100 text-center text-white" onClick={()=>{onPlayPVPMode()}}>PLAY !!!</button>
+                                    <button className="btn btn-danger font-weight-bold w-100 text-center text-white" onClick={()=>{onPlayPVPMode(chosenUser.user.loginUser.id, chosenUser.user.loginUser.name)}}>PLAY !!!</button>
                                 </NavLink>
                             </div>
                         </div>
