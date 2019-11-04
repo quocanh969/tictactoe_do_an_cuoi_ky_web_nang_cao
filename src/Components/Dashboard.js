@@ -18,7 +18,7 @@ class Dashboard extends React.Component
             <div className="container mt-5">
                 <div className="row">
                     
-                    <div className="col-3 m-2 bg-365e46 border-365e46 pt-3 text-white font-20">
+                    <div className="col-md-3 col-sm-12 m-2 bg-365e46 border-365e46 pt-3 text-white font-20">
                         <div className="text-center">
                             <img src={chosenUser.user.loginUser.avatar || userLogo} className="user-logo" alt="User logo"/>
                         </div>     
@@ -54,7 +54,7 @@ class Dashboard extends React.Component
                         </NavLink>                        
                     </div>
                     
-                    <div className="col-4 m-2 bg-365e46 border-365e46 pt-3 text-white">
+                    <div className="col-md-4 col-sm-12 m-2 bg-365e46 border-365e46 pt-3 text-white">
                         <div className="card border-0">
                             <img src={againstBot} className="card-img-top" alt="Play against bot"></img>
                             <div className="card-body bg-transparent">
@@ -70,7 +70,7 @@ class Dashboard extends React.Component
                         
                     </div>
                    
-                    <div className="col-4 m-2 bg-365e46 border-365e46 pt-3 text-white">
+                    <div className="col-md-4 col-sm-12 m-2 bg-365e46 border-365e46 pt-3 text-white">
                         <div className="card border-0">
                             <img src={againstHuman} className="card-img-top" alt="Play against human"></img>
                             <div className="card-body bg-transparent">

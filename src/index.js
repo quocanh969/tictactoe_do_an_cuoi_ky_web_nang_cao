@@ -5,10 +5,10 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 import { Provider } from 'react-redux';
-import {createBrowserHistory} from 'history';
 import thunkMiddleware from 'redux-thunk';
 import { createStore, applyMiddleware } from 'redux';
 import myReducer from './Reducers/Reducer';
+import configureSocket from './Helpers/Socket';
 
 const MyStore = createStore(
     myReducer,
@@ -16,6 +16,8 @@ const MyStore = createStore(
         thunkMiddleware,
     )
 );
+
+export const socket = configureSocket(MyStore.dispatch);
 
 ReactDOM.render(
     <Provider store={MyStore}>
