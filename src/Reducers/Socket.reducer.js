@@ -9,6 +9,20 @@ const initState = {
     undoRequest: false,
     drawRequest: false,
     giveUpRequest: false,
+    chatMessages: [
+        {
+            id:1,
+            message:"hello",
+        },
+        {
+            id:1,
+            message:"hello",
+        },
+        {
+            id:2,
+            message:"The href attribute is required for an anchor to be keyboard accessible. Provide a valid, navigable address as the href value. If you cannot provide an href, but still need the element to resemble a link, use",
+        },
+    ],
 }
 
 function SocketReducer(state = initState, action) {
@@ -38,6 +52,7 @@ function SocketReducer(state = initState, action) {
                 P2name: action.P2name,
                 isWaiting: false,
             }
+        // =================================================================
         case 'PAUSE_GAME':
             return {
                 ...state,
@@ -58,6 +73,7 @@ function SocketReducer(state = initState, action) {
                 ...state,
                 giveUpRequest: true,
             }
+        // =================================================================
         case 'RESUME_GAME':
             return {
                 ...state,
@@ -78,7 +94,14 @@ function SocketReducer(state = initState, action) {
                 ...state,
                 giveUpRequest: false,
             }
-        
+        // =================================================================
+        case 'RECEIVE_CHAT_MESSAGE':
+            let temp = state.chatMessages.slice();
+            temp.push({id:action.id,message:action.message});            
+            return {
+                ...state,
+                chatMessages:temp,
+            }        
         default:
             return state;
     }

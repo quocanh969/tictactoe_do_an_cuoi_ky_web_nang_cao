@@ -1,9 +1,10 @@
 import React from 'react';
 import Square from './Square';
 import logo from '../Assets/img/tic-tac-toe-logo.png';
-import { move, sendUndoRequest, sendDrawRequest, sendGiveUpRequest, answerUndoRequest } from '../Helpers/Socket';
+import { move, sendUndoRequest, sendDrawRequest, sendGiveUpRequest, answerUndoRequest, sendChatMessage } from '../Helpers/Socket';
 
 class Playground extends React.Component {
+    chosen = JSON.parse(localStorage.getItem('user'));
     componentWillMount() {
         this.props.onRestart();
     }
@@ -34,7 +35,7 @@ class Playground extends React.Component {
             }
         }
     }
-
+    
     handleHistoryClick(index) {
         let { isBotMode } = this.props.DashboardReducer;
         let { onBack2History } = this.props;
@@ -65,6 +66,15 @@ class Playground extends React.Component {
 
     handleAnswerUndoReq(isAccept){
         answerUndoRequest(isAccept);
+    }
+
+    sendMessage(){
+        console.log('send message');
+        console.log(this.refs.chat.value);
+        /*
+        sendChatMessage(this.chosen.user.loginUser.id,this.refs.chat.value);        
+        */
+        
     }
 
     createTable = () => {
@@ -235,23 +245,55 @@ class Playground extends React.Component {
         return <table style={{ width: '100%' }} cellSpacing="0" cellPadding="5"><thead><tr className="border-bottom border-black bg-secondary text-white"><th>Move#</th><th>Player</th><th>Row</th><th>Column</th></tr></thead><tbody>{table}</tbody></table>
     }
 
+    updateChatMessage()
+    {
+        let { chatMessages } = this.props.SocketReducer;        
+        let res = [];
+
+        for(let i = 0;i<chatMessages.length;i++)
+        {
+            if(this.chosen.user.loginUser.id === chatMessages[i].id)
+            {
+                res.push(<div className="d-flex my-0 pl-5" key={i}><p className="mb-1 px-3 py-1 text-white ml-auto bg-success border-radius-left-5px">{chatMessages[i].message}</p></div>)
+            }
+            else
+            {
+                res.push(<div className="d-flex my-0 pr-5" key={i}><p className="mb-1 px-3 py-1 text-white mr-auto bg-secondary border-radius-right-5px">{chatMessages[i].message}</p></div>)
+            }
+        }
+
+        return res;
+    }
+
     generateChatBox() {
         return (
             <div className="chatbox mt-0">
-                <div className="messages">
-                    <div>
-                        <p className="rounded-pill">
-                        </p>
-                    </div>
+                <div className="messages bg-f8c291">
+                    {this.updateChatMessage()}
                 </div>
 
                 <span>&nbsp;</span>
                 <div className="input-group mb-3 border-top border-dark input-container">
-                    <textarea type="text" rows="1" className="form-control" placeholder="Nhập tin nhắn ..." ></textarea>
+                    <textarea ref="chat" type="text" rows="1" className="form-control" placeholder="Nhập tin nhắn ..."                     
+                    onKeyDown={(event) => {
+                        if (event.key === 'Enter' && event.shiftKey) {
+                            
+                        }
+                        else if(event.key === 'Enter')
+                        {
+                            this.sendMessage();
+                            this.refs.chat.value = "";
+                            event.preventDefault();
+                        }
+                        else
+                        {
+                            // do nothing
+                        }
+                    }}></textarea>
                     <div className="input-group-append">
-                        <button className="btn btn-danger" type="button">
+                        <button className="btn btn-danger" type="button" onClick={()=>{this.sendMessage()}}>
                             Gửi
-                    </button>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -296,6 +338,7 @@ class Playground extends React.Component {
 
     handleClickDrawRequest() {
         console.log("draw request");
+        console.log(this.props.SocketReducer.chatMessages);
     }
 
     handleClickGiveUpRequest() {
@@ -464,6 +507,7 @@ class Playground extends React.Component {
                         <i className="fa fa-undo pull-left"></i>
                         <span className="mx-auto">RESTART</span>
                     </button>
+                    
                     <div className="d-flex justify-content-between mt-3">
                         <h4 className="text-center text-danger font-weight-bold">HISTORY MOVE</h4>
                         <div className="btn-group btn-group-toggle">

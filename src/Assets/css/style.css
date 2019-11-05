@@ -8,6 +8,11 @@
   background-color: #55e890;
 }
 
+.bg-f8c291
+{
+  background-color: #f7e5af;
+}
+
 .bg-transparent
 {
     background-color: transparent !important;
@@ -208,10 +213,16 @@ table
   padding: 10px;
 }
 
-.rounded-pill
+.border-radius-left-5px
 {
-  border: 0.1 solid transparent;
-  border-radius: 10px;
+  border: 0.1px solid transparent;
+  border-radius: 10px 10px 0px 10px;
+}
+
+.border-radius-right-5px
+{
+  border: 0.1px solid transparent;
+  border-radius: 10px 10px 10px 0px;
 }
 
 .input-container

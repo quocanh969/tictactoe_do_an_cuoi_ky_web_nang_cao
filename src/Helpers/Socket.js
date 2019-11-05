@@ -81,6 +81,14 @@ const configureSocket = dispatch => {
         console.log(data);
         dispatch({type:'RECEIVE_GIVE_UP_REQUEST',});
     });
+
+    // Chat
+    socket.on('receiveChatMessage',(data)=>{
+        room = data.room;
+        console.log('receive chat message');
+        console.log(data);
+        dispatch({type:'RECEIVE_CHAT_MESSAGE',id:data.id,message:data.message});
+    })
 }
 
 export const joinGame = (id, name) => {
@@ -115,12 +123,19 @@ export const answerUndoRequest = (isAccept) => {
 
 // Draw request
 export const sendDrawRequest = () => {
+    
     socket.emit('sendDrawRequest',{room:room});
 }
 
 // Give up request
 export const sendGiveUpRequest = () => {    
     socket.emit('sendGiveUpRequest',{room:room});
+}
+
+// Chat
+export const sendChatMessage = (id,message) => {
+    socket.emit('sendChatMessage',{room:room,id:id,message:message});
+    MyStore.dispatch({type:'RECEIVE_CHAT_MESSAGE',id:id,message:message});    
 }
 
 export default configureSocket;

@@ -1,7 +1,7 @@
 import { TOGGLE_SORT, RESTART, BACK_TO_HISTORY, MOVE_BOTMODE, TOGGLE_CHAT_BOX, MOVE_PVPMODE, RECEIVE_MESSAGE, HANDLE_UNDO, HANDO_DRAW, HANDO_GIVE_UP } from '../Actions/Action';
 
 const initState = {
-    isChatBoxOpen: false,
+    isChatBoxOpen: true,
 
     squares: Array(400).fill({ value: null, class: 'square square-normal' }),
     historyMove: [
