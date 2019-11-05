@@ -1,6 +1,8 @@
 import React from 'react';
 import Square from './Square';
 import logo from '../Assets/img/tic-tac-toe-logo.png';
+import { NavLink } from 'react-router-dom';
+import { us } from '../Services/UserService';
 import { move, sendUndoRequest, sendDrawRequest, sendGiveUpRequest, answerUndoRequest, answerDrawRequest, sendChatMessage } from '../Helpers/Socket';
 
 class Playground extends React.Component {
@@ -14,8 +16,64 @@ class Playground extends React.Component {
     }
 
     componentWillMount() {
-       this.props.onRestart();    
+       //this.props.onRestart();    
           
+    }
+
+    componentWillUnmount() {
+        // Update database
+        console.log(this.chosen);
+        console.log('isOver:',this.props.PlaygroundReducer.isOver);
+        if(this.props.PlaygroundReducer.isOver === 2)
+        {            
+            this.chosen.user.loginUser.draw++;
+            localStorage.setItem('user',JSON.stringify(this.chosen));
+            us.updateResultMatch(this.chosen.user.loginUser.id,this.chosen.user.loginUser.win,this.chosen.user.loginUser.draw,this.chosen.user.loginUser.lost)
+            .then(
+                ()=>{}
+            ).catch(
+                (error)=>{
+                    alert('Can not update reuslt to database');
+                }
+            )
+        }
+        else if(this.props.PlaygroundReducer.isOver === 1)
+        {
+            if((this.props.PlaygroundReducer.isP1Win && this.props.SocketReducer.Player === 1) || (!this.props.PlaygroundReducer.isP1Win && this.props.SocketReducer.Player === 2))
+            {// Thắng
+                console.log("Thắng");
+                this.chosen.user.loginUser.win++;
+                console.log(this.chosen);
+                localStorage.setItem('user',JSON.stringify(this.chosen));
+                us.updateResultMatch(this.chosen.user.loginUser.id,this.chosen.user.loginUser.win,this.chosen.user.loginUser.draw,this.chosen.user.loginUser.lost)
+                .then(
+                    ()=>{}
+                ).catch(
+                    (error)=>{
+                        alert('Can not update reuslt to database');
+                    }
+                )
+            }
+            else
+            {// Thua
+                console.log("Thua");
+                this.chosen.user.loginUser.lost++;
+                console.log(this.chosen);
+                localStorage.setItem('user',JSON.stringify(this.chosen));
+                us.updateResultMatch(this.chosen.user.loginUser.id,this.chosen.user.loginUser.win,this.chosen.user.loginUser.draw,this.chosen.user.loginUser.lost)
+                .then(
+                    ()=>{}
+                ).catch(
+                    (error)=>{
+                        alert('Can not update reuslt to database');
+                    }
+                )
+            }
+        }
+        else
+        {
+            // do nothing
+        }
     }
 
     componentDidUpdate() {
@@ -424,10 +482,12 @@ class Playground extends React.Component {
         else {
             return (
                 <div>
-                    <button className="btn btn-secondary w-100 d-flex font-weight-bold my-2 align-items-center">
-                        <i className="fa fa-arrow-left pull-left "></i>
-                        <span className="mx-auto">QUIT</span>
-                    </button>
+                    <NavLink to="/dashboard">
+                        <div className="btn btn-secondary w-100 d-flex font-weight-bold my-2 align-items-center">
+                            <i className="fa fa-arrow-left pull-left "></i>
+                            <span className="mx-auto">QUIT</span>
+                        </div>
+                    </NavLink>
                 </div>
             );
         }
@@ -497,10 +557,10 @@ class Playground extends React.Component {
                     <div className="status my-2 border-15px-365e46">
                         <ul className="nav nav-tabs">
                             <li className="nav-item">
-                                <a className={chatClass} onClick={() => { onToggleChatBox(false) }}>Chat</a>
+                                <a href="#" className={chatClass} onClick={() => { onToggleChatBox(false) }}>Chat</a>
                             </li>
                             <li className="nav-item">
-                                <a className={historyClass} onClick={() => { onToggleChatBox(true) }}>History</a>
+                                <a href="#" className={historyClass} onClick={() => { onToggleChatBox(true) }}>History</a>
                             </li>
                         </ul>
                         <div className="h-250px">
@@ -569,6 +629,8 @@ class Playground extends React.Component {
             DESClass = "btn btn-warning font-weight-bold my-btn active";
         }
 
+        
+
         // Kiểm tra trò chơi kết thúc
         if (isBotMode) {
             if (isOver === 2) {
@@ -602,6 +664,8 @@ class Playground extends React.Component {
                 type = <h3 className="text-center">--*****--</h3>
             }
             else if (isOver === 1) {
+                console.log('Player: ', Player);
+                console.log("isp1win: ",isP1Win);
                 if (Player === 1) // p1 win
                 {
                     if (isP1Win) {

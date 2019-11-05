@@ -27,7 +27,7 @@ function App() {
           <LoginRoute path='/register' exact component={RegisterContainer}></LoginRoute>
           <PrivateRoute path="/dashboard" exact component={DashboardContainer}></PrivateRoute>
           <PrivateRoute path="/user" exact component={UserContainer}></PrivateRoute>          
-          <Route path='/playground' exact component={PlaygroundContainer} />
+          <PrivateRoute path='/playground' exact component={PlaygroundContainer}></PrivateRoute>
           <Redirect to='/dashboard' />
         </Switch>
 

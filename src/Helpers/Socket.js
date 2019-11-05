@@ -80,7 +80,8 @@ const configureSocket = dispatch => {
         console.log(data);
         if(data.isAccept)
         { // Đồng ý
-            dispatch({type:'GAME_OVER',index:2});            
+            console.log("game over type",)
+            dispatch({type:'GAME_OVER',gameOverType:2});            
         }
         else
         {
@@ -96,14 +97,14 @@ const configureSocket = dispatch => {
         room = data.room;
         console.log('handle give up request');
         console.log(data);
-        alert("Your opponent give up");
-        if(data.Player === 1)
+        alert("Your opponent give up");        
+        if(data.player === 1)
         {
-            dispatch({type:'SET_STATE_FOR_GAME_OVER',isP1win:false});
+            dispatch({type:'SET_STATE_FOR_GAME_OVER',isP1Win:false});
         }
         else
         {
-            dispatch({type:'SET_STATE_FOR_GAME_OVER',isP1win:true});
+            dispatch({type:'SET_STATE_FOR_GAME_OVER',isP1Win:true});
         }
 
         dispatch({type:'GAME_OVER',gameOverType:1});        
@@ -168,13 +169,15 @@ export const answerDrawRequest = (isAccept) => {
 // Give up request
 export const sendGiveUpRequest = (player) => {    
     socket.emit('sendGiveUpRequest',{room:room,player:player});
+    console.log("player");
+    console.log(player);
     if(player === 1)
     {
-        MyStore.dispatch({type:'SET_STATE_FOR_GAME_OVER',isP1win:false});
+        MyStore.dispatch({type:'SET_STATE_FOR_GAME_OVER',isP1Win:false});
     }
     else
     {
-        MyStore.dispatch({type:'SET_STATE_FOR_GAME_OVER',isP1win:true});
+        MyStore.dispatch({type:'SET_STATE_FOR_GAME_OVER',isP1Win:true});
     }
     MyStore.dispatch({type:'GAME_OVER',gameOverType:1});
 }

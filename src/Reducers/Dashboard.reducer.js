@@ -1,6 +1,9 @@
 import { PLAY_AGAINST_BOT,PLAY_AGAINST_HUMAN } from '../Actions/Action';
 const initState = {
     isBotMode: true,
+    win:0,
+    draw:0,
+    lost:0,
 }
 
 function DashboardReducer(state = initState, action)
@@ -19,6 +22,15 @@ function DashboardReducer(state = initState, action)
                 return {
                     ...state,
                     isBotMode: false,
+                };
+            }
+        case 'UPDATE_RESULT':
+            {
+                return {
+                    ...state,
+                    win:action.win,
+                    draw:action.draw,
+                    lost:action.lost,
                 };
             }
         default:

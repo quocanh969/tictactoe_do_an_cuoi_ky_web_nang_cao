@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {NavLink} from 'react-router-dom';
+import { MyStore } from '../index';
 
 import userLogo from '../Assets/img/user-avatar.png';
 import againstBot from '../Assets/img/play-again-bot.jpg';
@@ -8,12 +9,23 @@ import againstHuman from '../Assets/img/play-against-human.png';
 
 class Dashboard extends React.Component
 {   
-    
+    constructor()
+    {
+        super();
+        let chosen = JSON.parse(localStorage.getItem('user'));
+        MyStore.dispatch({
+            type:'UPDATE_RESULT',
+            win:chosen.user.loginUser.win,
+            draw:chosen.user.loginUser.draw,
+            lost:chosen.user.loginUser.lost
+        });
+    }
     render()
     {
         let chosenUser = JSON.parse(localStorage.getItem('user'));
         
         let { onPlayBotMode,onPlayPVPMode } = this.props;
+        let { win, draw, lost } = this.props.DashboardReducer;
         return(
             <div className="container mt-5">
                 <div className="row">
@@ -36,15 +48,15 @@ class Dashboard extends React.Component
                                 </tr>
                                 <tr>
                                     <td className="font-weight-bold align-top">WIN:</td>
-                                    <td>{chosenUser.user.loginUser.win}</td>                                
+                                    <td>{win}</td>                                
                                 </tr>
                                 <tr>
                                     <td className="font-weight-bold align-top">DRAW:</td>
-                                    <td>{chosenUser.user.loginUser.draw}</td>                                
+                                    <td>{draw}</td>                                
                                 </tr>
                                 <tr>
                                     <td className="font-weight-bold align-top">LOST:</td>
-                                    <td>{chosenUser.user.loginUser.lost}</td>                                
+                                    <td>{lost}</td>                                
                                 </tr>
                             </tbody>
                         </table>                             

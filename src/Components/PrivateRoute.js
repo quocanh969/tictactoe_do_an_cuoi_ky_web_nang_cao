@@ -9,7 +9,7 @@ export const PrivateRoute = ({ component: Component, ...rest }) => {
                 let setupTime = localStorage.getItem('setTimeLogIn');
                 let now = new Date().getTime();
 
-                if (user && user.user !== false && setupTime - now < 3 * 24 * 60 * 60 * 1000) {
+                if (user && user.user !== false && setupTime - now < 6 * 60 * 60 * 1000) {
                     return (
                         <Component {...props}></Component>
                     );

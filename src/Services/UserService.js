@@ -6,6 +6,7 @@ export const us = {
     update,
     changePassword,
     changeAvatar,
+    updateResultMatch
 }
 
 function login(user) {
@@ -81,10 +82,24 @@ function changeAvatar(id, url) {
         },
         body: JSON.stringify({ id, url }),
     };
-    console.log('tiến hành gọi API update avatar');
     return fetch(`${ApiUrl}/users/update-avatar`, requestOption)
         .then(handleResponse);
 
+}
+
+function updateResultMatch(id,win,draw,lost) {
+    let chosen = JSON.parse(localStorage.getItem('user')); 
+    const requestOption = {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json' ,
+            'Authorization': `Bearer ${chosen.token}`,
+        },
+        body: JSON.stringify({ id, user: {win,draw,lost,}}),
+    };
+
+    return fetch(`${ApiUrl}/users/update-match`, requestOption)
+        .then(handleResponse);
 }
 
 function handleResponse(response) {

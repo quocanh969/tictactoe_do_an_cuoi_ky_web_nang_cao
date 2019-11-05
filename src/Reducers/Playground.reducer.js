@@ -437,7 +437,6 @@ function PlaygroundReducer(state = initState, action) {
             {
                 if(action.index === -1)
                 {
-                    console.log('undo request');
                     let l = state.historyMove.length;
                 
                     return {
@@ -458,7 +457,6 @@ function PlaygroundReducer(state = initState, action) {
                 }
                 else
                 {
-                    console.log('botmode back to history');
                     return {
                         ...state, 
                         winnerMove: state.historyMove[action.index].winnerMove,
