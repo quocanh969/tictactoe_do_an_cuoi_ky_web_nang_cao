@@ -1,7 +1,7 @@
 import React from 'react';
 import Square from './Square';
 import logo from '../Assets/img/tic-tac-toe-logo.png';
-import { move } from '../Helpers/Socket';
+import { move, sendUndoRequest, sendDrawRequest, sendGiveUpRequest, answerUndoRequest } from '../Helpers/Socket';
 
 class Playground extends React.Component {
     componentWillMount() {
@@ -9,46 +9,40 @@ class Playground extends React.Component {
     }
 
     handleMove(pos) {
-        
+
         let { onMoveOnBotmode } = this.props;
         if (this.props.DashboardReducer.isBotMode) {
-            
+
             // Human
             onMoveOnBotmode(pos);
             // Bot
             onMoveOnBotmode(this.findNextMoveForBot(pos));
         }
         else {// Người vs người  
-            let { Player,P1ID, P2ID } = this.props.SocketReducer; 
-            
+            let { Player, P1ID, P2ID } = this.props.SocketReducer;
+
             let { historyMove } = this.props.PlaygroundReducer;
-            
-            if(historyMove.length % 2 !== (Player - 1))
-            {
+
+            if (historyMove.length % 2 !== (Player - 1)) {
                 onMoveOnBotmode(pos);
-                if(Player === 1)
-                {
-                    move(P1ID,pos);
+                if (Player === 1) {
+                    move(P1ID, pos);
                 }
-                else
-                {
-                    move(P2ID,pos);
+                else {
+                    move(P2ID, pos);
                 }
             }
         }
     }
 
-    handleHistoryClick(historyState)
-    {
+    handleHistoryClick(index) {
         let { isBotMode } = this.props.DashboardReducer;
         let { onBack2History } = this.props;
 
-        if(isBotMode)
-        {
-            onBack2History(historyState);
+        if (isBotMode) {
+            onBack2History(index);
         }
-        else
-        {
+        else {
             // do nothing
         }
     }
@@ -69,6 +63,10 @@ class Playground extends React.Component {
         return botPos;
     }
 
+    handleAnswerUndoReq(isAccept){
+        answerUndoRequest(isAccept);
+    }
+
     createTable = () => {
         let { isWaiting } = this.props.SocketReducer;
         let { isBotMode } = this.props.DashboardReducer;
@@ -81,52 +79,116 @@ class Playground extends React.Component {
             );
         }
         else {
-            let { squares, winnerMove } = this.props.PlaygroundReducer;
+            let { pauseGame, undoRequest, drawRequest, giveUpRequest } = this.props.SocketReducer;
 
-            let winnerPos = 0;
-            let table = [];
+            if (pauseGame) {
+                return (
+                    <div className="pausing-screen text-center py-5">
+                        <div className="text-white font-weight-bold font-25">GAME PAUSE</div>
+                    </div>
+                );
+            }
+            else if (undoRequest) {
+                return (
+                    <div className="pausing-screen py-5">
+                        <div className="bg-light mx-auto p-3 w-50 border-transparent">
+                            <div className="font-weight-bold font-25 text-center text-danger">
+                                UNDO REQUEST
+                            </div>
+                            <div className="font-weight-bold font-25">
+                                Your opponent want to do the remove. Can you give he/she a chance ?
+                            </div>
+                            <div className="d-flex justify-content-around my-3">
+                                <button style={{width:'40%'}} className="btn btn-danger" onClick={()=>{this.handleAnswerUndoReq(true)}}>OK</button>
+                                <button style={{width:'40%'}} className="btn btn-secondary" onClick={()=>{this.handleAnswerUndoReq(false)}}>CANCEL</button>
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+            else if (drawRequest) {
+                return (
+                    <div className="pausing-screen py-5">
+                        <div className="bg-light mx-auto p-3 w-50 border-transparent">
+                            <div className="font-weight-bold font-25 text-center text-danger">
+                                DRAW REQUEST
+                            </div>
+                            <div className="font-weight-bold font-25">
+                                Your opponent want a draw match. Do you agree with he/she ?
+                            </div>
+                            <div className="d-flex justify-content-around my-3">
+                                <button style={{width:'40%'}} className="btn btn-danger">OK</button>
+                                <button style={{width:'40%'}} className="btn btn-secondary">CANCEL</button>
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+            else if (giveUpRequest) {
+                return (
+                    <div className="pausing-screen">
+                        <div className="m-auto text-white">GIVE UP</div>
+                    </div>
+                );
+            }
+            else {
+                let { squares, winnerMove } = this.props.PlaygroundReducer;
 
-            // Outer loop to create parent
-            for (let i = 0; i < 20; i++) {
-                let children = []
-                //Inner loop to create children
-                for (let j = 0; j < 20; j++) {
+                let winnerPos = 0;
+                let table = [];
 
-                    if (squares[20 * i + j].value !== null) {
-                        if (winnerPos < 5 && winnerMove[winnerPos] === i * 20 + j) {
-                            children.push(
-                                <Square key={20 * i + j} onClick={() => this.handleMove(20 * i + j)} value={squares[20 * i + j].value} className="square square-winnerMove" />
-                            )
-                            winnerPos += 1;
+                // Outer loop to create parent
+                for (let i = 0; i < 20; i++) {
+                    let children = []
+                    //Inner loop to create children
+                    for (let j = 0; j < 20; j++) {
+
+                        if (squares[20 * i + j].value !== null) {
+                            if (winnerPos < 5 && winnerMove[winnerPos] === i * 20 + j) {
+                                children.push(
+                                    <Square key={20 * i + j} onClick={() => this.handleMove(20 * i + j)} value={squares[20 * i + j].value} className="square square-winnerMove" />
+                                )
+                                winnerPos += 1;
+                            }
+                            else {
+                                children.push(
+                                    <Square key={20 * i + j} onClick={() => this.handleMove(20 * i + j)} value={squares[20 * i + j].value} className={squares[20 * i + j].class} />
+                                )
+                            }
                         }
                         else {
-                            children.push(
-                                <Square key={20 * i + j} onClick={() => this.handleMove(20 * i + j)} value={squares[20 * i + j].value} className={squares[20 * i + j].class} />
-                            )
+                            children.push(<Square key={20 * i + j} onClick={() => this.handleMove(20 * i + j)} value={'\u00A0'} className={squares[20 * i + j].class} />)
                         }
                     }
-                    else {
-                        children.push(<Square key={20 * i + j} onClick={() => this.handleMove(20 * i + j)} value={'\u00A0'} className={squares[20 * i + j].class} />)
-                    }
+
+                    //Create the parent and add the children
+                    table.push(<div className="board-row" key={i}>{children}</div>);
                 }
 
-                //Create the parent and add the children
-                table.push(<div className="board-row" key={i}>{children}</div>)
+                return table;
             }
-
-            return table
         }
     }
 
     createHistoryTable = () => {
-        let { isASC, selectedStep, historyMove } = this.props.PlaygroundReducer;     
-        let { isBotMode } = this.props.DashboardReducer;   
+        let { isASC, selectedStep, historyMove } = this.props.PlaygroundReducer;
+        let { isBotMode } = this.props.DashboardReducer;
 
-        const historyTable = historyMove.slice();
+        let historyTable;
+        if(isBotMode)
+        {
+            historyTable = historyMove.slice();
+        }
+        else
+        {
+            historyTable = historyMove.slice(0,selectedStep + 1);
+        }
 
+        let isReverse = 0;
 
         // Kiểm tra hình thức sort là tăng dần hay giảm dần theo thời gian đánh nước đó
         if (!isASC) {
+            isReverse = historyTable.length - 1;
             historyTable.reverse();
         }
 
@@ -137,36 +199,32 @@ class Playground extends React.Component {
             column = historyTable[i].index % 20 + 1;
             if (selectedStep === historyTable[i].step) {
                 if (historyTable[i].step === 0) {
-                    table.push(<tr className="cursor-pointer font-weight-bold border-bottom border-black" key={i} onClick={() => this.handleHistoryClick(historyTable[i])}><td>{historyTable[i].step}</td><td colSpan="3">GAME START</td></tr>)
+                    table.push(<tr className="cursor-pointer font-weight-bold border-bottom border-black" key={i} onClick={() => this.handleHistoryClick(Math.abs(isReverse - i))}><td>{historyTable[i].step}</td><td colSpan="3">GAME START</td></tr>)
                 }
                 else if (historyTable[i].step % 2 !== 0) {
-                    table.push(<tr className="cursor-pointer font-weight-bold border-bottom border-black" key={i} onClick={() => this.handleHistoryClick(historyTable[i])}><td>{historyTable[i].step}</td><td>P1</td><td>{row}</td><td>{column}</td></tr>)
+                    table.push(<tr className="cursor-pointer font-weight-bold border-bottom border-black" key={i} onClick={() => this.handleHistoryClick(Math.abs(isReverse - i))}><td>{historyTable[i].step}</td><td>P1</td><td>{row}</td><td>{column}</td></tr>)
                 }
                 else {
-                    if(isBotMode)
-                    {
-                        table.push(<tr className="cursor-pointer font-weight-bold border-bottom border-black" key={i} onClick={() => this.handleHistoryClick(historyTable[i])}><td>{historyTable[i].step}</td><td>P2</td><td>{row}</td><td>{column}</td></tr>)
+                    if (!isBotMode) {
+                        table.push(<tr className="cursor-pointer font-weight-bold border-bottom border-black" key={i} onClick={() => this.handleHistoryClick(Math.abs(isReverse - i))}><td>{historyTable[i].step}</td><td>P2</td><td>{row}</td><td>{column}</td></tr>)
                     }
-                    else
-                    {
+                    else {
                         // do nothing
                     }
                 }
             }
             else {
                 if (historyTable[i].step === 0) {
-                    table.push(<tr className="cursor-pointer border-bottom border-black" key={i} onClick={() => this.handleHistoryClick(historyTable[i])}><td>{historyTable[i].step}</td><td colSpan="3">GAME START</td></tr>)
+                    table.push(<tr className="cursor-pointer border-bottom border-black" key={i} onClick={() => this.handleHistoryClick(Math.abs(isReverse - i))}><td>{historyTable[i].step}</td><td colSpan="3">GAME START</td></tr>)
                 }
                 else if (historyTable[i].step % 2 !== 0) {
-                    table.push(<tr className="cursor-pointer border-bottom border-black" key={i} onClick={() => this.handleHistoryClick(historyTable[i])}><td>{historyTable[i].step}</td><td>P1</td><td>{row}</td><td>{column}</td></tr>)
+                    table.push(<tr className="cursor-pointer border-bottom border-black" key={i} onClick={() => this.handleHistoryClick(Math.abs(isReverse - i))}><td>{historyTable[i].step}</td><td>P1</td><td>{row}</td><td>{column}</td></tr>)
                 }
                 else {
-                    if(isBotMode)
-                    {
-                        table.push(<tr className="cursor-pointer border-bottom border-black" key={i} onClick={() => this.handleHistoryClick(historyTable[i])}><td>{historyTable[i].step}</td><td>P2</td><td>{row}</td><td>{column}</td></tr>)
+                    if (!isBotMode) {
+                        table.push(<tr className="cursor-pointer border-bottom border-black" key={i} onClick={() => this.handleHistoryClick(Math.abs(isReverse - i))}><td>{historyTable[i].step}</td><td>P2</td><td>{row}</td><td>{column}</td></tr>)
                     }
-                    else
-                    {
+                    else {
                         // do nothing
                     }
                 }
@@ -224,47 +282,82 @@ class Playground extends React.Component {
         }
     }
 
-    handleClickUndoRequest(){
-        console.log("undo request");        
+    handleClickUndoRequest() {
+        let { historyMove } = this.props.PlaygroundReducer;
+        if(historyMove.length < 3 )
+        {
+            alert('You can not undo when you did not play');
+        }
+        else
+        {
+            sendUndoRequest();
+        }
     }
 
-    handleClickDrawRequest(){
+    handleClickDrawRequest() {
         console.log("draw request");
     }
 
-    handleClickGiveUpRequest(){
+    handleClickGiveUpRequest() {
         console.log("give up request");
     }
 
-    generateComboButton(){
+    generateComboButton() {
         let { isOver } = this.props.PlaygroundReducer;
-        if(isOver === 0)
-        {
-            return (
+        if (isOver === 0) {
+            let { Player,pauseGame, undoRequest, drawRequest, giveUpRequest } = this.props.SocketReducer;
+            let { turnP1 } = this.props.PlaygroundReducer;            
+            console.log('turn p1:',turnP1);
+            console.log('player:',Player);
+            if (pauseGame || undoRequest || drawRequest || giveUpRequest || (!turnP1 && Player === 1) || (turnP1 && Player === 2)) {
+                return (
                     <div>
-                        <button className="btn btn-dark w-100 d-flex font-weight-bold my-2 align-items-center" onClick={()=>{this.handleClickUndoRequest()}}>
+                        <div>
+                            <button className="btn btn-dark w-100 d-flex font-weight-bold my-2 align-items-center">
+                                <i className="fa fa-undo pull-left "></i>
+                                <span className="mx-auto">UNDO</span>
+                            </button>
+                            <div className="d-flex justify-content-around mt-3">
+                                <button style={{ width: '49%' }} className="btn btn-info d-flex font-weight-bold align-items-center">
+                                    <i className="fa fa-handshake pull-left "></i>
+                                    <span className="mx-auto">SEND DRAW</span>
+                                </button>
+                                <button style={{ width: '49%' }} className="btn btn-danger d-flex font-weight-bold align-items-center">
+                                    <i className="fa fa-flag pull-left "></i>
+                                    <span className="mx-auto">GIVE UP</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+            else
+            {
+                return (
+                    <div>
+                        <button className="btn btn-dark w-100 d-flex font-weight-bold my-2 align-items-center" onClick={() => { this.handleClickUndoRequest() }}>
                             <i className="fa fa-undo pull-left "></i>
                             <span className="mx-auto">UNDO</span>
                         </button>
                         <div className="d-flex justify-content-around mt-3">
-                            <button style={{ width: '49%' }} className="btn btn-info d-flex font-weight-bold align-items-center" onClick={()=>{this.handleClickDrawRequest()}}>
+                            <button style={{ width: '49%' }} className="btn btn-info d-flex font-weight-bold align-items-center" onClick={() => { this.handleClickDrawRequest() }}>
                                 <i className="fa fa-handshake pull-left "></i>
                                 <span className="mx-auto">SEND DRAW</span>
                             </button>
-                            <button style={{ width: '49%' }} className="btn btn-danger d-flex font-weight-bold align-items-center" onClick={()=>{this.handleClickGiveUpRequest()}}>
+                            <button style={{ width: '49%' }} className="btn btn-danger d-flex font-weight-bold align-items-center" onClick={() => { this.handleClickGiveUpRequest() }}>
                                 <i className="fa fa-flag pull-left "></i>
                                 <span className="mx-auto">GIVE UP</span>
                             </button>
                         </div>
                     </div>
-            );
+                );
+            }
         }
-        else
-        {
+        else {
             return (
                 <div>
                     <button className="btn btn-secondary w-100 d-flex font-weight-bold my-2 align-items-center">
-                        <i className="fa fa-arrow-left pull-left "></i>               
+                        <i className="fa fa-arrow-left pull-left "></i>
                         <span className="mx-auto">QUIT</span>
                     </button>
                 </div>
@@ -276,16 +369,14 @@ class Playground extends React.Component {
         let { turnP1 } = this.props.PlaygroundReducer;
         let { isWaiting, P1name, P2name } = this.props.SocketReducer;
 
-        if(isWaiting)
-        {
+        if (isWaiting) {
             return (
                 <div className="font-weight-bold text-center status border-15px-365e46 py-4">
                     <img src={logo} alt="Tic Tac Toe Logo" className="logo"></img>
                 </div>
             );
         }
-        else
-        {
+        else {
             if (turnP1) {
                 return (
                     <div className="font-weight-bold text-center status border-15px-365e46 py-4">
@@ -410,8 +501,7 @@ class Playground extends React.Component {
         }
 
         // Kiểm tra trò chơi kết thúc
-        if(isBotMode)
-        {
+        if (isBotMode) {
             if (isOver === 2) {
                 notice = <div className="alert alert-dark">DRAW - Nobody win !!!</div>
                 type = <h3 className="text-center">--*****--</h3>
@@ -437,14 +527,13 @@ class Playground extends React.Component {
                 notice = <h3>Player: {status}</h3>;
             }
         }
-        else
-        {
+        else {
             if (isOver === 2) {
                 notice = <div className="alert alert-dark">DRAW - Nobody win !!!</div>
                 type = <h3 className="text-center">--*****--</h3>
             }
             else if (isOver === 1) {
-                if(Player === 1) // p1 win
+                if (Player === 1) // p1 win
                 {
                     if (isP1Win) {
                         notice = <div className="alert alert-success">Congratulation !!!</div>
@@ -468,8 +557,8 @@ class Playground extends React.Component {
                     notice = <h3>Player: {P1name}</h3>;
                 }
                 else {
-                    notice = <h3>Player: {P2name}</h3>;                    
-                }                
+                    notice = <h3>Player: {P2name}</h3>;
+                }
             }
         }
 

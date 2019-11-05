@@ -1,4 +1,5 @@
 import openSocket from 'socket.io-client';
+import {MyStore} from '../index';
 import { moveBotmode } from '../Actions/Action';
 
 const socket = openSocket('http://localhost:8080/');
@@ -35,11 +36,12 @@ const configureSocket = dispatch => {
     
     socket.on('turnPlayed',(data)=>{
         room = data.room;
-        console.log("player two");    
+        console.log("turn played");    
         console.log(data);    
         dispatch(moveBotmode(data.pos));
     });
 
+    // Undo request
     socket.on('handleUndoRequest',(data)=>{
         room = data.room;
         console.log('handle undo request');
@@ -47,6 +49,24 @@ const configureSocket = dispatch => {
         dispatch({type:'RECEIVE_UNDO_REQUEST',});
     });
 
+    socket.on('receiveUndoRequest',(data)=>{
+        room = data.room;
+        console.log('receive undo request');
+        console.log(data);
+        if(data.isAccept)
+        { // Đồng ý
+            dispatch({type:'BACK_TO_HISTORY',index:-1});            
+        }
+        else
+        {
+            alert("Your oppeonent don't agree for you to undo");
+        }
+        console.log("resume game");
+        dispatch({type:'RESUME_GAME'});
+
+    });
+
+    // Draw request
     socket.on('handleDrawRequest',(data)=>{
         room = data.room;
         console.log('handle draw request');
@@ -54,6 +74,7 @@ const configureSocket = dispatch => {
         dispatch({type:'RECEIVE_DRAW_REQUEST',});
     });
 
+    // Give up request
     socket.on('handleGiveUpRequest',(data)=>{
         room = data.room;
         console.log('handle give up request');
@@ -72,15 +93,33 @@ export const move = (id, pos) => {
     socket.emit('playTurn',{room:room,id:id,pos:pos,});
 }
 
+
+// Undo request
 export const sendUndoRequest = () => {
     socket.emit('sendUndoRequest',{room:room});
+    console.log("send undo request");
+    MyStore.dispatch({type:'PAUSE_GAME'});
+    
 }
 
+export const answerUndoRequest = (isAccept) => {
+    socket.emit('answerUndoRequest',{room:room, isAccept: isAccept});    
+    console.log('accept undo request');    
+    MyStore.dispatch({type:'ANSWER_UNDO_REQUEST'});    
+    if(isAccept)
+    {
+        console.log('back 1 step');
+        MyStore.dispatch({type:'BACK_TO_HISTORY',index:-1});
+    }
+}
+
+// Draw request
 export const sendDrawRequest = () => {
     socket.emit('sendDrawRequest',{room:room});
 }
 
-export const sendGiveUpRequest = () => {
+// Give up request
+export const sendGiveUpRequest = () => {    
     socket.emit('sendGiveUpRequest',{room:room});
 }
 

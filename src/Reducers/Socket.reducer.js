@@ -5,6 +5,7 @@ const initState = {
     P2ID: null,
     P2name: null,
     isWaiting: true,
+    pauseGame: false,
     undoRequest: false,
     drawRequest: false,
     giveUpRequest: false,
@@ -37,6 +38,11 @@ function SocketReducer(state = initState, action) {
                 P2name: action.P2name,
                 isWaiting: false,
             }
+        case 'PAUSE_GAME':
+            return {
+                ...state,
+                pauseGame: true,
+            }
         case 'RECEIVE_UNDO_REQUEST':
             return {
                 ...state,
@@ -52,6 +58,27 @@ function SocketReducer(state = initState, action) {
                 ...state,
                 giveUpRequest: true,
             }
+        case 'RESUME_GAME':
+            return {
+                ...state,
+                pauseGame: false,
+            }
+        case 'ANSWER_UNDO_REQUEST':
+            return {
+                ...state,
+                undoRequest: false,
+            }
+        case 'ANSWER_DRAW_REQUEST':
+            return {
+                ...state,
+                drawRequest: false,
+            }
+        case 'ANSWER_GIVE_UP_REQUEST':
+            return {
+                ...state,
+                giveUpRequest: false,
+            }
+        
         default:
             return state;
     }

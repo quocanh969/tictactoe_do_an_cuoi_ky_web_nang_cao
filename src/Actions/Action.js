@@ -21,10 +21,10 @@ export const Restart = () => {
     };
 };
 
-export const Back2History = stepState => {
+export const Back2History = index => {
     return {
         type: BACK_TO_HISTORY,
-        stepState
+        index,
     };
 };
 

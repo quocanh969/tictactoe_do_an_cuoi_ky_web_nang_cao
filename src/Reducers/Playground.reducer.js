@@ -435,19 +435,45 @@ function PlaygroundReducer(state = initState, action) {
             }
         case BACK_TO_HISTORY:
             {
-                return {
-                    ...state, winnerMove: action.stepState.winnerMove,
-                    selectedStep: action.stepState.step,
-                    squares: action.stepState.squares,
-                    currentMove: action.stepState.currentMove,
-                    isOver:
-                        action.stepState.winnerMove.length === 5
-                            ? 1
-                            : action.stepState.step === 400
-                                ? 2
-                                : 0,
-                    turnP1: action.stepState.step % 2 === 0
-                };
+                if(action.index === -1)
+                {
+                    console.log('undo request');
+                    let l = state.historyMove.length;
+                
+                    return {
+                        ...state,
+                        winnerMove: state.historyMove[l - 3].winnerMove,
+                        selectedStep: state.historyMove[l - 3].step,
+                        squares: state.historyMove[l - 3].squares,
+                        currentMove: state.historyMove[l - 3].currentMove,
+                        isOver:
+                        state.historyMove[l - 3].winnerMove.length === 5
+                                ? 1
+                                : state.historyMove[l - 3].step === 400
+                                    ? 2
+                                    : 0,
+                        turnP1: state.historyMove[l - 3].step % 2 === 0
+                    }
+                                    
+                }
+                else
+                {
+                    console.log('botmode back to history');
+                    return {
+                        ...state, 
+                        winnerMove: state.historyMove[action.index].winnerMove,
+                        selectedStep: state.historyMove[action.index].step,
+                        squares: state.historyMove[action.index].squares,
+                        currentMove: state.historyMove[action.index].currentMove,
+                        isOver:
+                        state.historyMove[action.index].winnerMove.length === 5
+                                ? 1
+                                : state.historyMove[action.index].step === 400
+                                    ? 2
+                                    : 0,
+                        turnP1: state.historyMove[action.index].step % 2 === 0
+                    };
+                }
             }  
         // PVP mode
         case TOGGLE_CHAT_BOX:

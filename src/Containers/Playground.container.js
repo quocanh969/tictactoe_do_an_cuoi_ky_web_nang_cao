@@ -23,8 +23,8 @@ const mapDispatchToProps = dispatch => {
         onToggleSort: isASC => {
             dispatch(ToggleSort(isASC));
         },
-        onBack2History: stepState => {
-            dispatch(Back2History(stepState));
+        onBack2History: index => {
+            dispatch(Back2History(index));
         },
     }
 }
