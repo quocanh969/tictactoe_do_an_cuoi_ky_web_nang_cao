@@ -1,3 +1,4 @@
+//const ApiUrl = "http://localhost:8080";
 const ApiUrl = "https://server-midtern-project.herokuapp.com";
 
 export const us = {
