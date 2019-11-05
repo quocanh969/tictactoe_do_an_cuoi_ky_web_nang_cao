@@ -188,4 +188,10 @@ export const sendChatMessage = (id,message) => {
     MyStore.dispatch({type:'RECEIVE_CHAT_MESSAGE',id:id,message:message});    
 }
 
+// Leave Server
+export const leaveSever = (player) => {
+    console.log('leaveserver')
+    socket.emit('leaveServer',{room:room,player:player});
+}
+
 export default configureSocket;

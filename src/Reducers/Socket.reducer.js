@@ -9,20 +9,7 @@ const initState = {
     undoRequest: false,
     drawRequest: false,
     giveUpRequest: false,
-    chatMessages: [
-        {
-            id:1,
-            message:"hello",
-        },
-        {
-            id:1,
-            message:"hello",
-        },
-        {
-            id:2,
-            message:"The href attribute is required for an anchor to be keyboard accessible. Provide a valid, navigable address as the href value. If you cannot provide an href, but still need the element to resemble a link, use",
-        },
-    ],
+    chatMessages: [],
 }
 
 function SocketReducer(state = initState, action) {

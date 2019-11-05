@@ -3,7 +3,7 @@ import Square from './Square';
 import logo from '../Assets/img/tic-tac-toe-logo.png';
 import { NavLink } from 'react-router-dom';
 import { us } from '../Services/UserService';
-import { move, sendUndoRequest, sendDrawRequest, sendGiveUpRequest, answerUndoRequest, answerDrawRequest, sendChatMessage } from '../Helpers/Socket';
+import { move, sendUndoRequest, sendDrawRequest, sendGiveUpRequest, answerUndoRequest, answerDrawRequest, sendChatMessage, leaveSever } from '../Helpers/Socket';
 
 class Playground extends React.Component {
     chosen = JSON.parse(localStorage.getItem('user'));    
@@ -16,14 +16,15 @@ class Playground extends React.Component {
     }
 
     componentWillMount() {
-       //this.props.onRestart();    
+       this.props.onRestart();    
           
     }
 
     componentWillUnmount() {
         // Update database
-        console.log(this.chosen);
-        console.log('isOver:',this.props.PlaygroundReducer.isOver);
+        
+        console.log("unmount");
+
         if(this.props.PlaygroundReducer.isOver === 2)
         {            
             this.chosen.user.loginUser.draw++;
@@ -35,7 +36,7 @@ class Playground extends React.Component {
                 (error)=>{
                     alert('Can not update reuslt to database');
                 }
-            )
+            );
         }
         else if(this.props.PlaygroundReducer.isOver === 1)
         {
@@ -74,6 +75,8 @@ class Playground extends React.Component {
         {
             // do nothing
         }
+
+        leaveSever(this.props.SocketReducer.Player);
     }
 
     componentDidUpdate() {
