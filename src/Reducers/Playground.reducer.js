@@ -1,4 +1,4 @@
-import { TOGGLE_SORT, RESTART, BACK_TO_HISTORY, MOVE_BOTMODE, TOGGLE_CHAT_BOX, MOVE_PVPMODE, RECEIVE_MESSAGE, HANDLE_UNDO, HANDO_DRAW, HANDO_GIVE_UP } from '../Actions/Action';
+import { TOGGLE_SORT, RESTART, BACK_TO_HISTORY, MOVE_BOTMODE, TOGGLE_CHAT_BOX, GAME_OVER, SET_STATE_FOR_GAME_OVER } from '../Actions/Action';
 
 const initState = {
     isChatBoxOpen: true,
@@ -483,6 +483,20 @@ function PlaygroundReducer(state = initState, action) {
                 }
                 else {
                     return { ...state, isChatBoxOpen: true };
+                }
+            }            
+        case GAME_OVER:
+            {
+                return {
+                    ...state,
+                    isOver: action.gameOverType,
+                }
+            }     
+        case SET_STATE_FOR_GAME_OVER:
+            {
+                return {
+                    ...state,
+                    isP1Win: action.isP1Win,
                 }
             }      
         default:

@@ -1,12 +1,15 @@
 import React from 'react';
 import Square from './Square';
 import logo from '../Assets/img/tic-tac-toe-logo.png';
-import { move, sendUndoRequest, sendDrawRequest, sendGiveUpRequest, answerUndoRequest, sendChatMessage } from '../Helpers/Socket';
+import { move, sendUndoRequest, sendDrawRequest, sendGiveUpRequest, answerUndoRequest, answerDrawRequest, sendChatMessage } from '../Helpers/Socket';
 
 class Playground extends React.Component {
     chosen = JSON.parse(localStorage.getItem('user'));
+    messagesEndRef = React.createRef()
+
     componentWillMount() {
-        this.props.onRestart();
+       this.props.onRestart();    
+          
     }
 
     handleMove(pos) {
@@ -68,13 +71,14 @@ class Playground extends React.Component {
         answerUndoRequest(isAccept);
     }
 
+    handleAnswerDrawReq(isAccept){
+        answerDrawRequest(isAccept);
+    }
+
     sendMessage(){
         console.log('send message');
         console.log(this.refs.chat.value);
-        /*
         sendChatMessage(this.chosen.user.loginUser.id,this.refs.chat.value);        
-        */
-        
     }
 
     createTable = () => {
@@ -127,8 +131,8 @@ class Playground extends React.Component {
                                 Your opponent want a draw match. Do you agree with he/she ?
                             </div>
                             <div className="d-flex justify-content-around my-3">
-                                <button style={{width:'40%'}} className="btn btn-danger">OK</button>
-                                <button style={{width:'40%'}} className="btn btn-secondary">CANCEL</button>
+                                <button style={{width:'40%'}} className="btn btn-danger" onClick={()=>{this.handleAnswerDrawReq(true)}}>OK</button>
+                                <button style={{width:'40%'}} className="btn btn-secondary" onClick={()=>{this.handleAnswerDrawReq(false)}}>CANCEL</button>
                             </div>
                         </div>
                     </div>
@@ -268,13 +272,13 @@ class Playground extends React.Component {
     generateChatBox() {
         return (
             <div className="chatbox mt-0">
-                <div className="messages bg-f8c291">
+                <div ref={el => { this.el = el; }} className="messages bg-f8c291">
                     {this.updateChatMessage()}
                 </div>
 
                 <span>&nbsp;</span>
                 <div className="input-group mb-3 border-top border-dark input-container">
-                    <textarea ref="chat" type="text" rows="1" className="form-control" placeholder="Nhập tin nhắn ..."                     
+                    <textarea type="text" rows="1" className="form-control" placeholder="Nhập tin nhắn ..."                     
                     onKeyDown={(event) => {
                         if (event.key === 'Enter' && event.shiftKey) {
                             
@@ -337,12 +341,11 @@ class Playground extends React.Component {
     }
 
     handleClickDrawRequest() {
-        console.log("draw request");
-        console.log(this.props.SocketReducer.chatMessages);
+        sendDrawRequest();
     }
 
     handleClickGiveUpRequest() {
-        console.log("give up request");
+        sendGiveUpRequest(this.props.SocketReducer.Player);
     }
 
     generateComboButton() {

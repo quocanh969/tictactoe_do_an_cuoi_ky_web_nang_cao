@@ -36,19 +36,7 @@ export const moveBotmode = pos => {
 };
 
 // Playground -- PVP mode
-export const MOVE_PVPMODE = 'MOVE_PVPMODE';
 export const TOGGLE_CHAT_BOX = 'TOGGLE_CHAT_BOX';
-export const RECEIVE_MESSAGE = 'RECEIVE_MESSAGE';
-export const HANDLE_UNDO = 'HANDLE_UNDO';
-export const HANDO_DRAW = 'SEND_DRAW';
-export const HANDO_GIVE_UP = 'SEND_GIVE_UP';
-
-export const movePVPMode = pos => {
-    return {
-        type: MOVE_PVPMODE,
-        pos,
-    }
-}
 
 export const toggleChatBox = isChatBoxOpen => {
     return {
@@ -57,29 +45,16 @@ export const toggleChatBox = isChatBoxOpen => {
     }
 }
 
-export const receiveMessage = () => {
+export const GAME_OVER = 'GAME_OVER';
+export const SET_STATE_FOR_GAME_OVER = 'SET_STATE_FOR_GAME_OVER';
+
+export const noticeGameOver = gameOverType => {
     return {
-        type: RECEIVE_MESSAGE,
+        type: GAME_OVER,
+        gameOverType,
     }
 }
 
-export const handleUndo = () => {
-    return {
-        type: HANDLE_UNDO,
-    }
-}
-
-export const handleDraw = () => {
-    return {
-        type: HANDO_DRAW,
-    }
-}
-
-export const handleGiveUp = () => {
-    return {
-        type: HANDO_GIVE_UP,
-    }
-}
 
 // Dashboard
 export const PLAY_AGAINST_BOT = 'PLAY_AGAINST_BOT';

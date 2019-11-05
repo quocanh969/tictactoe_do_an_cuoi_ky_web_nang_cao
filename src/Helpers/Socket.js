@@ -1,6 +1,6 @@
 import openSocket from 'socket.io-client';
 import {MyStore} from '../index';
-import { moveBotmode } from '../Actions/Action';
+import { moveBotmode, setStateForGameOver } from '../Actions/Action';
 
 const socket = openSocket('http://localhost:8080/');
 var room = null;
@@ -74,12 +74,39 @@ const configureSocket = dispatch => {
         dispatch({type:'RECEIVE_DRAW_REQUEST',});
     });
 
+    socket.on('receiveDrawRequest',(data)=>{
+        room = data.room;
+        console.log('receive draw request');
+        console.log(data);
+        if(data.isAccept)
+        { // Đồng ý
+            dispatch({type:'GAME_OVER',index:2});            
+        }
+        else
+        {
+            alert("Your oppeonent don't agree for a draw match");
+        }
+        console.log("resume game");
+        dispatch({type:'RESUME_GAME'});
+
+    });
+
     // Give up request
     socket.on('handleGiveUpRequest',(data)=>{
         room = data.room;
         console.log('handle give up request');
         console.log(data);
-        dispatch({type:'RECEIVE_GIVE_UP_REQUEST',});
+        alert("Your opponent give up");
+        if(data.Player === 1)
+        {
+            dispatch({type:'SET_STATE_FOR_GAME_OVER',isP1win:false});
+        }
+        else
+        {
+            dispatch({type:'SET_STATE_FOR_GAME_OVER',isP1win:true});
+        }
+
+        dispatch({type:'GAME_OVER',gameOverType:1});        
     });
 
     // Chat
@@ -123,13 +150,33 @@ export const answerUndoRequest = (isAccept) => {
 
 // Draw request
 export const sendDrawRequest = () => {
-    
     socket.emit('sendDrawRequest',{room:room});
+    MyStore.dispatch({type:'PAUSE_GAME'});
+}
+
+export const answerDrawRequest = (isAccept) => {
+    socket.emit('answerDrawRequest',{room:room, isAccept: isAccept});    
+    console.log('accept draw request');    
+    MyStore.dispatch({type:'ANSWER_DRAW_REQUEST'});    
+    if(isAccept)
+    {
+        console.log('back 1 step');
+        MyStore.dispatch({type:'GAME_OVER',gameOverType:2});
+    }
 }
 
 // Give up request
-export const sendGiveUpRequest = () => {    
-    socket.emit('sendGiveUpRequest',{room:room});
+export const sendGiveUpRequest = (player) => {    
+    socket.emit('sendGiveUpRequest',{room:room,player:player});
+    if(player === 1)
+    {
+        MyStore.dispatch({type:'SET_STATE_FOR_GAME_OVER',isP1win:false});
+    }
+    else
+    {
+        MyStore.dispatch({type:'SET_STATE_FOR_GAME_OVER',isP1win:true});
+    }
+    MyStore.dispatch({type:'GAME_OVER',gameOverType:1});
 }
 
 // Chat

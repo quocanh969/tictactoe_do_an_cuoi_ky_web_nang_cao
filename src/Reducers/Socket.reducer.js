@@ -67,12 +67,7 @@ function SocketReducer(state = initState, action) {
             return {
                 ...state,
                 drawRequest: true,
-            }
-        case 'RECEIVE_GIVE_UP_REQUEST':
-            return {
-                ...state,
-                giveUpRequest: true,
-            }
+            }        
         // =================================================================
         case 'RESUME_GAME':
             return {
@@ -88,12 +83,13 @@ function SocketReducer(state = initState, action) {
             return {
                 ...state,
                 drawRequest: false,
-            }
-        case 'ANSWER_GIVE_UP_REQUEST':
-            return {
-                ...state,
-                giveUpRequest: false,
-            }
+            }        
+        // =================================================================
+        case 'RECEIVE_GIVE_UP_REQUEST':
+                return {
+                    ...state,
+                    giveUpRequest: true,
+                }
         // =================================================================
         case 'RECEIVE_CHAT_MESSAGE':
             let temp = state.chatMessages.slice();
