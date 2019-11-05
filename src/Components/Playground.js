@@ -4,12 +4,34 @@ import logo from '../Assets/img/tic-tac-toe-logo.png';
 import { move, sendUndoRequest, sendDrawRequest, sendGiveUpRequest, answerUndoRequest, answerDrawRequest, sendChatMessage } from '../Helpers/Socket';
 
 class Playground extends React.Component {
-    chosen = JSON.parse(localStorage.getItem('user'));
-    messagesEndRef = React.createRef()
+    chosen = JSON.parse(localStorage.getItem('user'));    
+
+    constructor()
+    {
+        super();
+
+        this.scrollDown = this.scrollDown.bind(this);
+    }
 
     componentWillMount() {
        this.props.onRestart();    
           
+    }
+
+    componentDidUpdate() {
+        this.scrollDown();
+    }
+
+    scrollDown() {
+        const { container } = this.refs
+        if(container === undefined)
+        {
+            // do nothing
+        }
+        else
+        {
+            container.scrollTop = container.scrollHeight
+        }
     }
 
     handleMove(pos) {
@@ -272,13 +294,13 @@ class Playground extends React.Component {
     generateChatBox() {
         return (
             <div className="chatbox mt-0">
-                <div ref={el => { this.el = el; }} className="messages bg-f8c291">
+                <div ref="container" className="messages bg-f8c291">
                     {this.updateChatMessage()}
                 </div>
 
                 <span>&nbsp;</span>
                 <div className="input-group mb-3 border-top border-dark input-container">
-                    <textarea type="text" rows="1" className="form-control" placeholder="Nhập tin nhắn ..."                     
+                    <textarea ref="chat" type="text" rows="1" className="form-control" placeholder="Nhập tin nhắn ..."                     
                     onKeyDown={(event) => {
                         if (event.key === 'Enter' && event.shiftKey) {
                             
