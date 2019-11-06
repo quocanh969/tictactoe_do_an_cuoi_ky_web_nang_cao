@@ -1,5 +1,4 @@
 import { us } from '../Services/UserService';
-import { joinGame } from '../Helpers/Socket';
 import { history } from '../Helpers/History';
 // Playground
 export const TOGGLE_SORT = 'TOGGLE_SORT';
@@ -61,13 +60,14 @@ export const PLAY_AGAINST_BOT = 'PLAY_AGAINST_BOT';
 export const PLAY_AGAINST_HUMAN = 'PLAY_AGAINST_HUMAN';
 
 export const playAgainstBot = () => {
+    localStorage.setItem('isBotMode',JSON.stringify({value:true}));
     return {
         type: PLAY_AGAINST_BOT,
     }
 }
 
-export const playAgainstHuman = (id, name) => {
-    joinGame(id,name);
+export const playAgainstHuman = () => {
+    localStorage.setItem('isBotMode',JSON.stringify({value:false}));
     return {
         type: PLAY_AGAINST_HUMAN,        
     }
@@ -332,6 +332,8 @@ export const UPDATE_STATUS = "UPDATE_STATUS";
 export const logOut = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('setTimeLogIn');
+    localStorage.removeItem('isBotMode');
+    localStorage.removeItem('room');
     return {
         type: LOG_OUT,
     }

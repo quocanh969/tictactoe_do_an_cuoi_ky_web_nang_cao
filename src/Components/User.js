@@ -164,7 +164,7 @@ class User extends React.Component {
         return (
             <div className="container mt-5">
                 <div className="row">
-                    <div className="col-5 m-2 bg-365e46 border-365e46 py-3 font-weight-bold text-white font-20 text-center">
+                    <div className="col-md-5 col-sm-12 m-2 bg-365e46 border-365e46 py-3 font-weight-bold text-white font-20 text-center">
                         <img src={this.props.UserReducer.url || userAvatar} style={{ width: '80%' }} alt="User Avatar"></img>
 
                         
@@ -199,7 +199,7 @@ class User extends React.Component {
                         </div>
                     </div>
 
-                    <div className="col">
+                    <div className="col col-sm-12">
                         <div className="m-2 bg-365e46 border-365e46 pt-1 text-white font-20">
                             <h2 className="text-center font-weight-bold">USER INFO</h2>
                             <form id="changeInfoForm" className="m-4" onSubmit={this.handleUserInfoSubmit}>

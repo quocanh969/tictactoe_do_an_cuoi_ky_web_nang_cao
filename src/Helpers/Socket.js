@@ -2,8 +2,8 @@ import openSocket from 'socket.io-client';
 import {MyStore} from '../index';
 import { moveBotmode, setStateForGameOver } from '../Actions/Action';
 
-//const socket = openSocket('http://localhost:8080/');
-const socket = openSocket('https://server-midtern-project.herokuapp.com/');
+const socket = openSocket('http://localhost:8080/');
+//const socket = openSocket('https://server-midtern-project.herokuapp.com/');
 var room = null;
 const configureSocket = dispatch => {
     socket.on('connect', () => {
@@ -24,6 +24,7 @@ const configureSocket = dispatch => {
         console.log(data);
         console.log('room',room);
         socket.emit('noticeBeginMatch',{room:room,});
+        localStorage.setItem('room',JSON.stringify({room:room,player:1}));
         dispatch({type:'PLAYER_ONE',P1ID:data.P1ID, P1name:data.P1name,P2ID:data.P2ID, P2name:data.P2name,});
     });
 
@@ -31,6 +32,7 @@ const configureSocket = dispatch => {
         room = data.room;
         console.log("player two");    
         console.log(data);    
+        localStorage.setItem('room',JSON.stringify({room:room,player:2}));
         dispatch({type:'PLAYER_TWO',P1ID:data.P1ID, P1name:data.P1name,P2ID:data.P2ID, P2name:data.P2name,});
     });
     // _------------------------------------------------
@@ -117,11 +119,67 @@ const configureSocket = dispatch => {
         console.log('receive chat message');
         console.log(data);
         dispatch({type:'RECEIVE_CHAT_MESSAGE',id:data.id,message:data.message});
-    })
+    });
+
+    // Xin state info
+    socket.on('requireStateInfo',(data)=>{
+        room = data.room;
+        console.log('give state info');    
+        let playground = MyStore.getState().PlaygroundReducer;
+        let scket = MyStore.getState().SocketReducer;
+        socket.emit('answerStateInfo',{
+            Player:data.player,
+            room:data.room,
+            squares:playground.squares,
+            historyMove:playground.historyMove,
+            winnerMove:playground.winnerMove,
+            selectedStep:playground.selectedStep,
+            currentMove:playground.currentMove,
+            turnP1:playground.turnP1,
+            isASC:playground.isASC,
+            isOver:playground.isOver,
+            isP1Win:playground.isP1Win,
+            P1ID: scket.P1ID,
+            P1name: scket.P1name,
+            P2ID: scket.P2ID,
+            P2name: scket.P2name,            
+            chatMessages: scket.chatMessages,
+        });
+    });
+    
+    socket.on('receiveStateInfo',(data)=>{
+        room = data.room;
+        console.log('receive state info');
+        console.log(data);      
+        dispatch({
+            type:'UPDATE_SOCKET_STATE_INFO',
+            Player:data.Player,
+            P1ID: data.P1ID,
+            P1name: data.P1name,
+            P2ID: data.P2ID,
+            P2name: data.P2name,            
+            chatMessages: data.chatMessages,
+        })
+        dispatch({
+            type:'UPDATE_STATE_PLAYGROUND_INFO',
+            squares:data.squares,
+            historyMove:data.historyMove,
+            winnerMove:data.winnerMove,
+            selectedStep:data.selectedStep,
+            currentMove:data.currentMove,
+            turnP1:data.turnP1,
+            isASC:data.isASC,
+            isOver:data.isOver,
+            isP1Win:data.isP1Win,
+        });
+        dispatch({
+            type:'PLAY_AGAINST_HUMAN',
+        });
+    });
 }
 
 export const joinGame = (id, name) => {
-    
+    console.log('join game');
     socket.emit('joinGame', { id: id, name: name });
 }
 
@@ -129,7 +187,6 @@ export const move = (id, pos) => {
     console.log(room);
     socket.emit('playTurn',{room:room,id:id,pos:pos,});
 }
-
 
 // Undo request
 export const sendUndoRequest = () => {
@@ -189,10 +246,16 @@ export const sendChatMessage = (id,message) => {
     MyStore.dispatch({type:'RECEIVE_CHAT_MESSAGE',id:id,message:message});    
 }
 
+// Refresh pages but not leave room
+export const sendStateInfoRequire = (room) => {    
+    socket.emit('sendStateInfoRequire',{room:room});
+}
+
 // Leave Server
-export const leaveSever = (player) => {
-    console.log('leaveserver')
-    socket.emit('leaveServer',{room:room,player:player});
+export const leaveServer = (player,isEndGame) => {
+    console.log('leave room');
+    localStorage.removeItem('room');
+    socket.emit('leaveServer',{room:room,player:player,isEndGame:isEndGame,});
 }
 
 export default configureSocket;

@@ -82,7 +82,7 @@ class Header extends React.Component
             <div className="container-fluid bg-365e46 py-3">
                 <div className="container text-white">
                     <div className="row">
-                        <div className="col-9 font-weight-bold border-right border-light">
+                        <div className="col-md-9 col-sm-7 font-weight-bold border-right border-light">
                             <NavLink to="/dashboard">
                                 <img className="logo cursor-pointer" src={logo} alt="logo"></img>
                             </NavLink>

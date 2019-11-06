@@ -3,48 +3,52 @@ import Square from './Square';
 import logo from '../Assets/img/tic-tac-toe-logo.png';
 import { NavLink } from 'react-router-dom';
 import { us } from '../Services/UserService';
-import { move, sendUndoRequest, sendDrawRequest, sendGiveUpRequest, answerUndoRequest, answerDrawRequest, sendChatMessage, leaveSever } from '../Helpers/Socket';
+import { sendStateInfoRequire, move, sendUndoRequest, sendDrawRequest, sendGiveUpRequest, answerUndoRequest, answerDrawRequest, sendChatMessage, leaveServer, joinGame } from '../Helpers/Socket';
 
 class Playground extends React.Component {
     chosen = JSON.parse(localStorage.getItem('user'));    
-
+    room;
+    EndGame = false;
+    
     constructor()
     {
-        super();
-
+        super();        
         this.scrollDown = this.scrollDown.bind(this);
     }
 
     componentWillMount() {
-       this.props.onRestart();    
-          
+
+        console.log('will mount');
+        if(JSON.parse(localStorage.getItem('isBotMode')).value)
+        {
+            this.props.onRestart();
+        }
+        else
+        {
+            this.room = JSON.parse(localStorage.getItem('room'));
+            console.log(this.room);
+            if(this.room === null)
+            {
+                joinGame(this.chosen.user.loginUser.id,this.chosen.user.loginUser.name);
+                this.props.onRestart();  
+            }
+            else
+            {
+                console.log(this.room);            
+                sendStateInfoRequire(this.room.room);
+            }
+        }
     }
 
     componentWillUnmount() {
         // Update database
         
         console.log("unmount");
-
-        if(this.props.PlaygroundReducer.isOver === 2)
-        {            
-            this.chosen.user.loginUser.draw++;
-            localStorage.setItem('user',JSON.stringify(this.chosen));
-            us.updateResultMatch(this.chosen.user.loginUser.id,this.chosen.user.loginUser.win,this.chosen.user.loginUser.draw,this.chosen.user.loginUser.lost)
-            .then(
-                ()=>{}
-            ).catch(
-                (error)=>{
-                    alert('Can not update reuslt to database');
-                }
-            );
-        }
-        else if(this.props.PlaygroundReducer.isOver === 1)
+        if(localStorage.getItem('isBotMode') !== null && !JSON.parse(localStorage.getItem('isBotMode')).value)
         {
-            if((this.props.PlaygroundReducer.isP1Win && this.props.SocketReducer.Player === 1) || (!this.props.PlaygroundReducer.isP1Win && this.props.SocketReducer.Player === 2))
-            {// Thắng
-                console.log("Thắng");
-                this.chosen.user.loginUser.win++;
-                console.log(this.chosen);
+            if(this.props.PlaygroundReducer.isOver === 2)
+            {            
+                this.chosen.user.loginUser.draw++;
                 localStorage.setItem('user',JSON.stringify(this.chosen));
                 us.updateResultMatch(this.chosen.user.loginUser.id,this.chosen.user.loginUser.win,this.chosen.user.loginUser.draw,this.chosen.user.loginUser.lost)
                 .then(
@@ -53,30 +57,49 @@ class Playground extends React.Component {
                     (error)=>{
                         alert('Can not update reuslt to database');
                     }
-                )
+                );
+            }
+            else if(this.props.PlaygroundReducer.isOver === 1)
+            {
+                if((this.props.PlaygroundReducer.isP1Win && this.props.SocketReducer.Player === 1) || (!this.props.PlaygroundReducer.isP1Win && this.props.SocketReducer.Player === 2))
+                {// Thắng
+                    console.log("Thắng");
+                    this.chosen.user.loginUser.win++;
+                    console.log(this.chosen);
+                    localStorage.setItem('user',JSON.stringify(this.chosen));
+                    us.updateResultMatch(this.chosen.user.loginUser.id,this.chosen.user.loginUser.win,this.chosen.user.loginUser.draw,this.chosen.user.loginUser.lost)
+                    .then(
+                        ()=>{}
+                    ).catch(
+                        (error)=>{
+                            alert('Can not update reuslt to database');
+                        }
+                    )
+                }
+                else
+                {// Thua
+                    console.log("Thua");
+                    this.chosen.user.loginUser.lost++;
+                    console.log(this.chosen);
+                    localStorage.setItem('user',JSON.stringify(this.chosen));
+                    us.updateResultMatch(this.chosen.user.loginUser.id,this.chosen.user.loginUser.win,this.chosen.user.loginUser.draw,this.chosen.user.loginUser.lost)
+                    .then(
+                        ()=>{}
+                    ).catch(
+                        (error)=>{
+                            alert('Can not update reuslt to database');
+                        }
+                    )
+                }
             }
             else
-            {// Thua
-                console.log("Thua");
-                this.chosen.user.loginUser.lost++;
-                console.log(this.chosen);
-                localStorage.setItem('user',JSON.stringify(this.chosen));
-                us.updateResultMatch(this.chosen.user.loginUser.id,this.chosen.user.loginUser.win,this.chosen.user.loginUser.draw,this.chosen.user.loginUser.lost)
-                .then(
-                    ()=>{}
-                ).catch(
-                    (error)=>{
-                        alert('Can not update reuslt to database');
-                    }
-                )
+            {
+                // do nothing
             }
+            console.log("End game");
+            console.log(this.EndGame);
+            leaveServer(this.props.SocketReducer.Player, this.EndGame);
         }
-        else
-        {
-            // do nothing
-        }
-
-        leaveSever(this.props.SocketReducer.Player);
     }
 
     componentDidUpdate() {
@@ -167,6 +190,8 @@ class Playground extends React.Component {
     createTable = () => {
         let { isWaiting } = this.props.SocketReducer;
         let { isBotMode } = this.props.DashboardReducer;
+        console.log('isBotMode:',isBotMode);
+        console.log('isWaiting:',isWaiting);
 
         if (!isBotMode && isWaiting) {
             return (
@@ -486,7 +511,7 @@ class Playground extends React.Component {
             return (
                 <div>
                     <NavLink to="/dashboard">
-                        <div className="btn btn-secondary w-100 d-flex font-weight-bold my-2 align-items-center">
+                        <div className="btn btn-secondary w-100 d-flex font-weight-bold my-2 align-items-center" onClick={()=>{this.EndGame = true}}>
                             <i className="fa fa-arrow-left pull-left "></i>
                             <span className="mx-auto">QUIT</span>
                         </div>
@@ -550,7 +575,7 @@ class Playground extends React.Component {
             return (
                 // vs Human mode
 
-                <div className="col mt-1">
+                <div className="col-md-4 col-sm-12 mt-1">
                     {this.generateTurnPlayer()}
 
                     <div className="status my-2 border-15px-365e46">

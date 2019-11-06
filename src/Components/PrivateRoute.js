@@ -17,6 +17,8 @@ export const PrivateRoute = ({ component: Component, ...rest }) => {
                 else {
                     localStorage.removeItem('user');
                     localStorage.removeItem('setTimeLogIn');
+                    localStorage.removeItem('isBotMode');
+                    localStorage.removeItem('room');
                     return (
                         <Redirect to={
                             {

@@ -496,7 +496,22 @@ function PlaygroundReducer(state = initState, action) {
                     ...state,
                     isP1Win: action.isP1Win,
                 }
-            }      
+            }    
+        case 'UPDATE_STATE_PLAYGROUND_INFO':
+            {
+                return {
+                    ...state,
+                    squares: action.squares,
+                    historyMove: action.historyMove,
+                    winnerMove: action.winnerMove,
+                    selectedStep: action.selectedStep,
+                    currentMove: action.currentMove,
+                    turnP1: action.turnP1,
+                    isASC: action.isASC,
+                    isOver: action.isOver,
+                    isP1Win: action.isP1Win,
+                }
+            }  
         default:
             {
                 return state;

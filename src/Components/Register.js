@@ -76,10 +76,10 @@ class Register extends React.Component
         return(
             <div style={{paddingTop: '100px'}} className="container">   
                 <div className="row">
-                    <div className="col-7">
+                    <div className="col-md-7 col-sm-12 mt-5">
                         <img className="image-background mt-5" src={register_background} alt="Tic Tac Toe Background"></img>
                     </div>
-                    <div className="col">                        
+                    <div className="col mt-5">                        
                         <div className="cart my-login-cart mx-auto">
                             <div className="card-header login-header text-center bg-danger border-light">REGISTER</div>                            
                             <div className="card-body bg-365e46">
