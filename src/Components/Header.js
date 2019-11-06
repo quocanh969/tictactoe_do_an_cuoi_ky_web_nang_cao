@@ -32,8 +32,8 @@ class Header extends React.Component
         if(user !== null && user.user !== false)
         {    
             return(      
-                <div className="col row justify-content-end">
-                    <div className="mx-0 px-3 font-weight-bold font-25 align-self-center">
+                <div className="col-md-3 col-sm row">
+                    <div className="mx-0 px-3 font-weight-bold font-25 align-self-center text-wrap">
                         {user.user.loginUser.name}
                     </div>
                     <div className="btn-group bg-transparent">
@@ -60,7 +60,7 @@ class Header extends React.Component
         else
         {
             return(                
-                <div className="col row align-items-center ml-3">
+                <div className="col-md-3 col-sm row align-items-center ml-3">
                     <NavLink to="/login">
                         <div className="mx-0 px-3 font-weight-bold text-white">
                             LOGIN

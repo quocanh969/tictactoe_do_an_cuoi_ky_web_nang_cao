@@ -104,24 +104,6 @@ class Login extends React.Component
                                             </NavLink>      
                                         </div>
                                     </div>     
-
-                                    <div className="text-center text-light my-5">
-                                        <hr className="border-light"/>
-                                        <span>
-                                            Or login with
-                                        </span>
-                                        <hr className="border-light"/>
-                                    </div>
-
-                                    <button className="text-white font-weight-bold btn btn-facebook text-center w-100 my-2">
-                                        <i className="fab fa-facebook-square mr-3"></i>
-                                        <span>Facebook</span>
-                                    </button>
-
-                                    <button className="text-white font-weight-bold btn btn-google text-center w-100 my-2">
-                                        <i className="fab fa-google mr-3"></i>
-                                        <span>Google</span>
-                                    </button>
                                 </form>       
                             </div>
                         </div>

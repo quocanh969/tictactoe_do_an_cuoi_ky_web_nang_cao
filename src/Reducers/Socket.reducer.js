@@ -104,7 +104,14 @@ function SocketReducer(state = initState, action) {
                     P2name: action.P2name,            
                     chatMessages: action.chatMessages,
                 }
-            }     
+            } 
+        case 'RESTART_MESSAGES':
+            {
+                return {
+                    ...state,
+                    chatMessages: [],
+                }
+            }    
         default:
             return state;
     }

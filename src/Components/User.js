@@ -199,7 +199,7 @@ class User extends React.Component {
                         </div>
                     </div>
 
-                    <div className="col col-sm-12">
+                    <div className="col">
                         <div className="m-2 bg-365e46 border-365e46 pt-1 text-white font-20">
                             <h2 className="text-center font-weight-bold">USER INFO</h2>
                             <form id="changeInfoForm" className="m-4" onSubmit={this.handleUserInfoSubmit}>
@@ -271,7 +271,7 @@ class User extends React.Component {
                                             name="address"
                                             className="form-control"
                                             id="address"
-                                            defaultValue={this.chosenUser.user.loginUser.gender}
+                                            defaultValue={this.chosenUser.user.loginUser.address}
                                             onChange={this.handleUserInfoChange}
                                         />
                                     </div>

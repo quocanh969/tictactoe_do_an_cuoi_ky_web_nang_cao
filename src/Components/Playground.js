@@ -3,7 +3,7 @@ import Square from './Square';
 import logo from '../Assets/img/tic-tac-toe-logo.png';
 import { NavLink } from 'react-router-dom';
 import { us } from '../Services/UserService';
-import { sendStateInfoRequire, move, sendUndoRequest, sendDrawRequest, sendGiveUpRequest, answerUndoRequest, answerDrawRequest, sendChatMessage, leaveServer, joinGame } from '../Helpers/Socket';
+import { restartMessage, sendStateInfoRequire, move, sendUndoRequest, sendDrawRequest, sendGiveUpRequest, answerUndoRequest, answerDrawRequest, sendChatMessage, leaveServer, joinGame } from '../Helpers/Socket';
 
 class Playground extends React.Component {
     chosen = JSON.parse(localStorage.getItem('user'));    
@@ -22,6 +22,7 @@ class Playground extends React.Component {
         if(JSON.parse(localStorage.getItem('isBotMode')).value)
         {
             this.props.onRestart();
+            restartMessage();
         }
         else
         {
@@ -31,6 +32,7 @@ class Playground extends React.Component {
             {
                 joinGame(this.chosen.user.loginUser.id,this.chosen.user.loginUser.name);
                 this.props.onRestart();  
+                restartMessage();
             }
             else
             {
@@ -125,6 +127,7 @@ class Playground extends React.Component {
 
             // Human
             onMoveOnBotmode(pos);
+
             // Bot
             onMoveOnBotmode(this.findNextMoveForBot(pos));
         }
@@ -310,7 +313,7 @@ class Playground extends React.Component {
 
         // Kiểm tra hình thức sort là tăng dần hay giảm dần theo thời gian đánh nước đó
         if (!isASC) {
-            isReverse = historyTable.length - 1;
+            isReverse = historyTable.length + 1;
             historyTable.reverse();
         }
 
@@ -321,14 +324,14 @@ class Playground extends React.Component {
             column = historyTable[i].index % 20 + 1;
             if (selectedStep === historyTable[i].step) {
                 if (historyTable[i].step === 0) {
-                    table.push(<tr className="cursor-pointer font-weight-bold border-bottom border-black" key={i} onClick={() => this.handleHistoryClick(Math.abs(isReverse - i))}><td>{historyTable[i].step}</td><td colSpan="3">GAME START</td></tr>)
+                    table.push(<tr className="cursor-pointer font-weight-bold border-bottom border-black" key={i} onClick={() => this.handleHistoryClick(Math.abs(0))}><td>{historyTable[i].step}</td><td colSpan="3">GAME START</td></tr>)
                 }
                 else if (historyTable[i].step % 2 !== 0) {
-                    table.push(<tr className="cursor-pointer font-weight-bold border-bottom border-black" key={i} onClick={() => this.handleHistoryClick(Math.abs(isReverse - i))}><td>{historyTable[i].step}</td><td>P1</td><td>{row}</td><td>{column}</td></tr>)
+                    table.push(<tr className="cursor-pointer font-weight-bold border-bottom border-black" key={i} onClick={() => this.handleHistoryClick(Math.abs(isReverse - i -1))}><td>{historyTable[i].step}</td><td>P1</td><td>{row}</td><td>{column}</td></tr>)
                 }
                 else {
                     if (!isBotMode) {
-                        table.push(<tr className="cursor-pointer font-weight-bold border-bottom border-black" key={i} onClick={() => this.handleHistoryClick(Math.abs(isReverse - i))}><td>{historyTable[i].step}</td><td>P2</td><td>{row}</td><td>{column}</td></tr>)
+                        table.push(<tr className="cursor-pointer font-weight-bold border-bottom border-black" key={i} onClick={() => this.handleHistoryClick(Math.abs(isReverse - i -1))}><td>{historyTable[i].step}</td><td>P2</td><td>{row}</td><td>{column}</td></tr>)
                     }
                     else {
                         // do nothing
@@ -337,14 +340,14 @@ class Playground extends React.Component {
             }
             else {
                 if (historyTable[i].step === 0) {
-                    table.push(<tr className="cursor-pointer border-bottom border-black" key={i} onClick={() => this.handleHistoryClick(Math.abs(isReverse - i))}><td>{historyTable[i].step}</td><td colSpan="3">GAME START</td></tr>)
+                    table.push(<tr className="cursor-pointer border-bottom border-black" key={i} onClick={() => this.handleHistoryClick(Math.abs(0))}><td>{historyTable[i].step}</td><td colSpan="3">GAME START</td></tr>)
                 }
                 else if (historyTable[i].step % 2 !== 0) {
-                    table.push(<tr className="cursor-pointer border-bottom border-black" key={i} onClick={() => this.handleHistoryClick(Math.abs(isReverse - i))}><td>{historyTable[i].step}</td><td>P1</td><td>{row}</td><td>{column}</td></tr>)
+                    table.push(<tr className="cursor-pointer border-bottom border-black" key={i} onClick={() => this.handleHistoryClick(Math.abs(isReverse - i - 1))}><td>{historyTable[i].step}</td><td>P1</td><td>{row}</td><td>{column}</td></tr>)
                 }
                 else {
                     if (!isBotMode) {
-                        table.push(<tr className="cursor-pointer border-bottom border-black" key={i} onClick={() => this.handleHistoryClick(Math.abs(isReverse - i))}><td>{historyTable[i].step}</td><td>P2</td><td>{row}</td><td>{column}</td></tr>)
+                        table.push(<tr className="cursor-pointer border-bottom border-black" key={i} onClick={() => this.handleHistoryClick(Math.abs(isReverse - i - 1))}><td>{historyTable[i].step}</td><td>P2</td><td>{row}</td><td>{column}</td></tr>)
                     }
                     else {
                         // do nothing

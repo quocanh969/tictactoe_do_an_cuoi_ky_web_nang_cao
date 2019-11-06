@@ -2,8 +2,8 @@ import openSocket from 'socket.io-client';
 import {MyStore} from '../index';
 import { moveBotmode, setStateForGameOver } from '../Actions/Action';
 
-//const socket = openSocket('http://localhost:8080/');
-const socket = openSocket('https://server-midtern-project.herokuapp.com/');
+const socket = openSocket('http://localhost:8080/');
+//const socket = openSocket('https://server-midtern-project.herokuapp.com/');
 var room = null;
 const configureSocket = dispatch => {
     socket.on('connect', () => {
@@ -256,6 +256,10 @@ export const leaveServer = (player,isEndGame) => {
     console.log('leave room');
     localStorage.removeItem('room');
     socket.emit('leaveServer',{room:room,player:player,isEndGame:isEndGame,});
+}
+
+export const restartMessage = () => {
+    MyStore.dispatch({type:'RESTART_MESSAGES'});
 }
 
 export default configureSocket;

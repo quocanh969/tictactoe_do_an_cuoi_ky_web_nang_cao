@@ -1,5 +1,5 @@
-//const ApiUrl = "http://localhost:8080";
-const ApiUrl = "https://server-midtern-project.herokuapp.com";
+const ApiUrl = "http://localhost:8080";
+//const ApiUrl = "https://server-midtern-project.herokuapp.com";
 
 export const us = {
     login,
@@ -54,6 +54,7 @@ function update(id, userInfo) {
         body: JSON.stringify({ id, user: userInfo }),
     };
 
+    console.log('update password');
     return fetch(`${ApiUrl}/users/update`, requestOption)
         .then(handleResponse);
 }
@@ -66,10 +67,10 @@ function changePassword(id, password) {
             'Content-Type': 'application/json' ,
             'Authorization': `Bearer ${chosen.token}`,
         },
-        body: JSON.stringify({ id, password }),
+        body: JSON.stringify({id: id,password: password, }),
     };
 
-    return fetch(`${ApiUrl}/update-password`, requestOption)
+    return fetch(`${ApiUrl}/users/update-password`, requestOption)
         .then(handleResponse);
 }
 
